@@ -479,3 +479,17 @@
 
 /mob/living/carbon/proc/get_adjusted_metabolism(metabolism)
 	return metabolism
+
+/mob/living/carbon/proc/set_only_species_language(var/only_lang)
+
+	if (!species_language)
+		return
+
+		only_species_language = only_lang
+
+	if (only_lang)
+		species_language_default = 1
+		set_default_language(species.language)
+	else if (species.default_language != species.language)
+		species_language_default = 0
+

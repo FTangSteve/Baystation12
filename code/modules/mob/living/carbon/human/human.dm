@@ -1112,9 +1112,15 @@
 
 	if(species.language)
 		add_language(species.language)
+		species_language = all_languages[species.language]
 
 	if(species.default_language)
 		add_language(species.default_language)
+		if (species.default_language == species.language)
+			species_language_default = 1
+		else
+			species_language_default = 0
+
 
 	if(species.base_color && default_colour)
 		//Apply colour.

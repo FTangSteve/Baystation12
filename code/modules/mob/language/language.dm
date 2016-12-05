@@ -215,7 +215,7 @@
 	if(href_list["default_lang"])
 		if(href_list["default_lang"] == "reset")
 
-			if (species_language)
+			if (species_language && species_language_default)
 				set_default_language(all_languages[species_language])
 			else
 				set_default_language(null)

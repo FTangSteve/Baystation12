@@ -37,6 +37,12 @@
 #define LANGUAGE_GUTTER "Gutter"
 #define LANGUAGE_CULT "Cult"
 
+// Primitive form languages
+#define LANGUAGE_CHIMP "Chimpanzee"
+#define LANGUAGE_NEAERA "Neaera"
+#define LANGUAGE_STOK "Stok"
+#define LANGUAGE_FARWA "Farwa"
+
 // Language flags.
 #define WHITELISTED  1   // Language is available if the speaker is whitelisted.
 #define RESTRICTED   2   // Language can only be acquired by spawning or an admin.

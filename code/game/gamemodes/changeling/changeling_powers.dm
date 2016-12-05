@@ -766,8 +766,6 @@ var/list/datum/absorbed_dna/hivemind_bank = list()
 	var/datum/changeling/changeling = changeling_power(40)
 	if(!changeling)	return 0
 
-
-
 	var/list/names = list()
 	for(var/datum/absorbed_dna/DNA in changeling.absorbed_dna)
 		names += "[DNA.name]"
@@ -786,6 +784,9 @@ var/list/datum/absorbed_dna/hivemind_bank = list()
 		return 0
 
 	T.handle_changeling_transform(chosen_dna)
+
+	if(T.species_language_default)
+		T.set_only_species_language(1)
 
 	feedback_add_details("changeling_powers","TS")
 	return 1

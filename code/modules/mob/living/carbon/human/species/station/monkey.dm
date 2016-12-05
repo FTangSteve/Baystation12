@@ -8,7 +8,7 @@
 	damage_overlays = 'icons/mob/human_races/masks/dam_monkey.dmi'
 	damage_mask = 'icons/mob/human_races/masks/dam_mask_monkey.dmi'
 	blood_mask = 'icons/mob/human_races/masks/blood_monkey.dmi'
-	language = null
+	language = "Chimpanzee"
 	default_language = "Chimpanzee"
 	greater_form = "Human"
 	mob_size = MOB_SMALL
@@ -77,6 +77,7 @@
 	deform = 'icons/mob/human_races/monkeys/r_farwa.dmi'
 
 	greater_form = "Tajaran"
+	language ="Farwa"
 	default_language = "Farwa"
 	flesh_color = "#AFA59E"
 	base_color = "#333333"
@@ -91,6 +92,7 @@
 	deform = 'icons/mob/human_races/monkeys/r_neaera.dmi'
 
 	greater_form = "Skrell"
+	language = "Neaera"
 	default_language = "Neaera"
 	flesh_color = "#8CD7A3"
 	blood_color = "#1D2CBF"
@@ -107,6 +109,7 @@
 
 	tail = "stoktail"
 	greater_form = "Unathi"
+	language = "Stok"
 	default_language = "Stok"
 	flesh_color = "#34AF10"
 	base_color = "#066000"
