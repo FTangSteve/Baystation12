@@ -88,11 +88,11 @@
 		if(self_message && M == src)
 			M.show_message(self_message, VISIBLE_MESSAGE, blind_message, AUDIBLE_MESSAGE)
 			continue
-			
+
 		if(M.see_invisible >= invisibility)
 			M.show_message(message, VISIBLE_MESSAGE, blind_message, AUDIBLE_MESSAGE)
 			continue
-			
+
 		if(blind_message)
 			M.show_message(blind_message, AUDIBLE_MESSAGE)
 			continue
@@ -965,7 +965,7 @@ mob/proc/yank_out_object()
 /mob/proc/has_brain_worms()
 
 	for(var/I in contents)
-		if(istype(I,/mob/living/simple_animal/borer))
+		if(istype(I,/mob/living/carbon/borer))
 			return I
 
 	return 0

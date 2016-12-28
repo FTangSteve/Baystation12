@@ -167,3 +167,5 @@
 
 	var/memory = ""
 	var/flavor_text = ""
+
+	var/list/datum/bark/assigned_bark

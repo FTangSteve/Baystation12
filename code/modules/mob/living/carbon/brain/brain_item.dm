@@ -14,6 +14,7 @@
 	origin_tech = list(TECH_BIO = 3)
 	attack_verb = list("attacked", "slapped", "whacked")
 	var/mob/living/carbon/brain/brainmob = null
+	var borer_depth = 0
 
 /obj/item/organ/internal/brain/robotize()
 	replace_self_with(/obj/item/organ/internal/mmi_holder/posibrain)
@@ -87,7 +88,7 @@
 	if(name == initial(name))
 		name = "\the [owner.real_name]'s [initial(name)]"
 
-	var/mob/living/simple_animal/borer/borer = owner.has_brain_worms()
+	var/mob/living/carbon/borer/borer = owner.has_brain_worms()
 
 	if(borer)
 		borer.detatch() //Should remove borer if the brain is removed - RR
