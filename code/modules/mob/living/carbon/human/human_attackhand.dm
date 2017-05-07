@@ -15,7 +15,7 @@
 		var/obj/item/organ/external/temp = H.organs_by_name[BP_R_HAND]
 		if(H.hand)
 			temp = H.organs_by_name[BP_L_HAND]
-		if(!temp || !temp.is_usable())
+		if(!temp || (!temp.is_usable() && !M.nabbing))
 			to_chat(H, "<span class='warning'>You can't use your hand.</span>")
 			return
 
@@ -54,8 +54,15 @@
 	if(istype(M,/mob/living/carbon))
 		M.spread_disease_to(src, "Contact")
 
+	if(M.nabbing && ishuman(M))
+		if(attack_nabbing(M) == 1)
+			return 1
+		else if (attack_nabbing(M) == -1)
+			return 0
+
 	switch(M.a_intent)
 		if(I_HELP)
+
 			if(istype(H) && health < config.health_threshold_crit && health > config.health_threshold_dead)
 				if(!H.check_has_mouth())
 					to_chat(H, "<span class='danger'>You don't have a mouth, you cannot perform CPR!</span>")
@@ -69,7 +76,9 @@
 				if((head && (head.body_parts_covered & FACE)) || (wear_mask && (wear_mask.body_parts_covered & FACE)))
 					to_chat(H, "<span class='notice'>Remove [src]'s mask!</span>")
 					return 0
-
+				if (!H.internal_organs_by_name[BP_LUNGS])
+					to_chat(H, "<span class='danger'>You don't have a lungs, you cannot perform CPR!</span>")
+					return
 				if (!cpr_time)
 					return 0
 
@@ -92,6 +101,7 @@
 			return 1
 
 		if(I_GRAB)
+
 			if(M == src || anchored)
 				return 0
 			for(var/obj/item/weapon/grab/G in src.grabbed_by)
@@ -145,7 +155,7 @@
 				// Someone got a good grip on them, they won't be able to do much damage
 				rand_damage = max(1, rand_damage - 2)
 
-			if(src.grabbed_by.len || src.buckled || !src.canmove || src==H)
+			if(src.grabbed_by.len || src.buckled || !src.canmove || src==H || src.nabbed_by || H.species.flags & NO_BLOCK)
 				accurate = 1 // certain circumstances make it impossible for us to evade punches
 				rand_damage = 5
 
@@ -273,6 +283,47 @@
 			playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 			visible_message("<span class='danger'>[M] attempted to disarm \the [src]!</span>")
 	return
+
+/mob/living/carbon/human/proc/attack_nabbing(mob/living/carbon/M as mob)
+	var/mob/living/carbon/human/H = M
+	switch(M.a_intent)
+		if(I_HELP)
+			if(istype(H))
+				var/obj/item/organ/external/temp = H.organs_by_name[BP_R_HAND]
+				if(H.hand)
+					temp = H.organs_by_name[BP_L_HAND]
+				if(!temp || temp.is_usable())
+					to_chat(H, "<span class='warning'>You can't use that hand.</span>")
+					return -1
+
+		if (I_GRAB)
+			if(M == src || anchored)
+				return -1
+			for(var/obj/item/weapon/grab/G in src.grabbed_by)
+				if(G.assailant == M)
+					to_chat(M, "<span class='notice'>You already nabbed [src].</span>")
+					return 1
+			if(w_uniform)
+				w_uniform.add_fingerprint(M)
+
+			var/obj/item/weapon/grab/nabber/N = new /obj/item/weapon/grab/nabber(M, src)
+			if(buckled)
+				to_chat(M, "<span class='notice'>You cannot nab [src], \he is buckled in!</span>")
+			if(!N)	//the grab will delete itself in New if affecting is anchored
+				return
+			M.put_in_active_hand(N)
+			N.synch()
+			LAssailant = M
+
+			H.do_attack_animation(src)
+			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			visible_message("<span class='warning'>[M] has grabbed [src] aggressively!</span>")
+			return 1
+
+
+	return 0
+
+
 
 /mob/living/carbon/human/proc/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, inrange, params)
 	return

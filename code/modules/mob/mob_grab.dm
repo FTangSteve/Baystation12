@@ -47,6 +47,12 @@
 	if(affecting.anchored || !assailant.Adjacent(victim)) //Shouldn't even be created if these aren't met
 		return
 
+	if(affecting.nabbed_by)
+		for (var/obj/item/weapon/grab/N in assailant.nabbed_by)
+			if (N.state > GRAB_AGGRESSIVE)
+				assailant.visible_message("<span class='notice'>[N.assailant] is holding onto [affecting] too tightly!.</span>")
+
+
 	affecting.grabbed_by += src
 
 	hud = new /obj/screen/grab(src)
@@ -194,6 +200,10 @@
 //Updating pixelshift, position and direction
 //Gets called on process, when the grab gets upgraded or the assailant moves
 /obj/item/weapon/grab/proc/adjust_position()
+	if(istype(src, /obj/item/weapon/grab/nabber))
+		var/obj/item/weapon/grab/nabber/N = src
+		N.adjust_position()
+		return 1
 	if(!affecting || affecting.buckled)
 		return
 	if(!assailant)
@@ -436,8 +446,8 @@
 			break_chance_table = list(5, 20, 40, 80, 100)
 
 
-	//It's easier to break out of a grab by a smaller mob
-	break_strength += max(size_difference(affecting, assailant), 0)
+	//It's easier to break out of a grab by a smaller mob and harder from a larger mob
+	break_strength += size_difference(affecting, assailant)
 
 	var/break_chance = break_chance_table[Clamp(break_strength, 1, break_chance_table.len)]
 	if(prob(break_chance))

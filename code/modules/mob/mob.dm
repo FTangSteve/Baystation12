@@ -691,6 +691,11 @@
 			canmove = 0
 			break
 
+	for(var/obj/item/weapon/grab/nabber/N in nabbed_by)
+		if(N.state >= GRAB_AGGRESSIVE)
+			canmove = 0
+			lying = 0
+
 	//Temporarily moved here from the various life() procs
 	//I'm fixing stuff incrementally so this will likely find a better home.
 	//It just makes sense for now. ~Carn

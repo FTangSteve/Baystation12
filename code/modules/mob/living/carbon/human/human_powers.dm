@@ -1,4 +1,4 @@
-// These should all be procs, you can add them to humans/subspecies by
+	// These should all be procs, you can add them to humans/subspecies by
 // species.dm's inherent_verbs ~ Z
 
 /mob/living/carbon/human/proc/tackle()
@@ -274,3 +274,119 @@
 
 	visible_message("<span class='warning'>\The [src] quivers slightly, then splits apart with a wet slithering noise.</span>")
 	qdel(src)
+
+/mob/living/carbon/human/proc/nab()
+	set category = "Abilities"
+	set name = "Nab"
+	set desc = "Nab someone."
+
+	if(last_special > world.time)
+		return
+
+	if(incapacitated(INCAPACITATION_DISABLED) || buckled || pinned.len)
+		to_chat(src, "<span class='warning'>You cannot tackle in your current state.</span>")
+		return
+
+	var/list/choices = list()
+	for(var/mob/living/M in view(1,src))
+		if(!istype(M,/mob/living/silicon) && Adjacent(M))
+			choices += M
+	choices -= src
+
+	var/mob/living/T = input(src,"Who do you wish to tackle?") as null|anything in choices
+
+	if(!T || !src || src.stat) return
+
+	if(!Adjacent(T)) return
+
+	//check again because we waited for user input
+	if(last_special > world.time)
+		return
+
+	if(incapacitated(INCAPACITATION_DISABLED) || buckled || pinned.len)
+		to_chat(src, "<span class='warning'>You cannot tackle in your current state.</span>")
+		return
+
+	last_special = world.time + 50
+
+	playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
+	T.Weaken(rand(1,3))
+	if(prob(75))
+		visible_message("<span class='danger'>\The [src] has tackled down [T]!</span>")
+	else
+		visible_message("<span class='danger'>\The [src] tried to tackle down [T]!</span>")
+		src.Weaken(rand(2,4)) //failure, you both get knocked down
+
+/mob/living/carbon/human/proc/bite()
+	set category = "Abilities"
+	set name = "Gut"
+	set desc = "While grabbing someone aggressively, rip their guts out or tear them apart."
+
+	if(last_special > world.time)
+		return
+
+	if(incapacitated())
+		to_chat(src, "<span class='warning'>You cannot do that in your current state.</span>")
+		return
+
+	var/obj/item/weapon/grab/G = locate() in src
+	if(!G || !istype(G))
+		to_chat(src, "<span class='warning'>You are not grabbing anyone.</span>")
+		return
+
+	if(G.state < GRAB_AGGRESSIVE)
+		to_chat(src, "<span class='warning'>You must have an aggressive grab to gut your prey!</span>")
+		return
+
+	last_special = world.time + 50
+
+	visible_message("<span class='danger'>\The [src] rips viciously at [G.affecting]'s body with its claws!</span>")
+
+	if(istype(G.affecting,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = G.affecting
+		H.apply_damage(50,BRUTE)
+		if(H.stat == 2)
+			H.gib()
+	else
+		var/mob/living/M = G.affecting
+		if(!istype(M)) return //wut
+		M.apply_damage(50,BRUTE)
+		if(M.stat == 2)
+			M.gib()
+
+/mob/living/carbon/human/proc/crush()
+	set category = "Abilities"
+	set name = "Crush"
+	set desc = "When upgrading to a "
+
+	if(last_special > world.time)
+		return
+
+	if(incapacitated())
+		to_chat(src, "<span class='warning'>You cannot do that in your current state.</span>")
+		return
+
+	var/obj/item/weapon/grab/G = locate() in src
+	if(!G || !istype(G))
+		to_chat(src, "<span class='warning'>You are not grabbing anyone.</span>")
+		return
+
+	if(G.state < GRAB_AGGRESSIVE)
+		to_chat(src, "<span class='warning'>You must have an aggressive grab to gut your prey!</span>")
+		return
+
+	last_special = world.time + 50
+
+	visible_message("<span class='danger'>\The [src] rips viciously at [G.affecting]'s body with its claws!</span>")
+
+	if(istype(G.affecting,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = G.affecting
+		H.apply_damage(50,BRUTE)
+		if(H.stat == 2)
+			H.gib()
+	else
+		var/mob/living/M = G.affecting
+		if(!istype(M)) return //wut
+		M.apply_damage(50,BRUTE)
+		if(M.stat == 2)
+			M.gib()

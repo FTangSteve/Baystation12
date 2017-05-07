@@ -103,6 +103,7 @@
 	var/datum/hud/hud_used = null
 
 	var/list/grabbed_by = list(  )
+	var/list/nabbed_by = list(  )
 
 	var/in_throw_mode = 0
 
@@ -162,3 +163,5 @@
 
 	var/memory = ""
 	var/flavor_text = ""
+
+	var/nabbing  // Whether a creature with a CAN_NAB tag is grabbing normally or in nab mode.

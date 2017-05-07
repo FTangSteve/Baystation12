@@ -1396,6 +1396,8 @@
 
 	if(stat) return
 	pulling_punches = !pulling_punches
+	if(species.flags & CAN_NAB)
+		nabbing = !pulling_punches
 	to_chat(src, "<span class='notice'>You are now [pulling_punches ? "pulling your punches" : "not pulling your punches"].</span>")
 	return
 
