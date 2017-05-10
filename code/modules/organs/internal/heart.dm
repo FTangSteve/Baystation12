@@ -14,6 +14,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 40
 	var/heartbeat = 0
 	var/beat_sound = 'sound/effects/singlebeat.ogg'
 	var/tmp/next_blood_squirt = 0
+	var/open
 
 /obj/item/organ/internal/heart/die()
 	if(dead_icon)

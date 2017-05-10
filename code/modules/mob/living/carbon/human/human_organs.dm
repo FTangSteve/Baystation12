@@ -159,10 +159,10 @@
 		return
 
 	var/obj/item/thing = get_equipped_item(disarm_slot)
-	
+
 	if(!thing)
 		return
-	
+
 	drop_from_inventory(thing)
 
 	if(affected.robotic >= ORGAN_ROBOT)
@@ -175,7 +175,7 @@
 		spawn(10)
 			qdel(spark_system)
 
-	else 
+	else
 		var/grasp_name = affected.name
 		if((affected.body_part in list(ARM_LEFT, ARM_RIGHT)) && affected.children.len)
 			var/obj/item/organ/external/hand = pick(affected.children)

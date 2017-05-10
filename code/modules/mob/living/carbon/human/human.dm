@@ -1404,7 +1404,7 @@
 //generates realistic-ish pulse output based on preset levels
 /mob/living/carbon/human/proc/get_pulse(var/method)	//method 0 is for hands, 1 is for machines, more accurate
 	var/temp = 0
-	switch(pulse())
+	switch(pulse(method))
 		if(PULSE_NONE)
 			return "0"
 		if(PULSE_SLOW)
@@ -1415,15 +1415,19 @@
 			temp = rand(90, 120)
 		if(PULSE_2FAST)
 			temp = rand(120, 160)
+		if(PULSE_OPEN)
+			return method ? "0" : "muddled and unclear; you can't seem to find a vein"
 		if(PULSE_THREADY)
 			return method ? ">250" : "extremely weak and fast, patient's artery feels like a thread"
 	return "[method ? temp : temp + rand(-10, 10)]"
 //			output for machines^	^^^^^^^output for people^^^^^^^^^
 
-/mob/living/carbon/human/proc/pulse()
+/mob/living/carbon/human/proc/pulse(var/method = 1)
 	var/obj/item/organ/internal/heart/H = internal_organs_by_name["heart"]
 	if(!H)
 		return PULSE_NONE
+	else if (H.open && !method)
+		return PULSE_OPEN
 	else
 		return H.pulse
 

@@ -3,6 +3,11 @@
 	name_plural = "Nab-PlaceHolders"
 	blurb = "A race of large insectoid creatures."
 
+	warning_low_pressure = 50
+	hazard_low_pressure = -1
+
+	body_temperature = T0C + 5
+
 	blood_color = "#525252"
 	flesh_color = "#525252"
 
@@ -14,20 +19,67 @@
 
 	darksight = 8
 	slowdown = -0.5
-	total_health = 300
+	total_health = 150
 	brute_mod = 0.85
 	burn_mod =  1.35
 	gluttonous = GLUT_SMALLER
 	mob_size = MOB_LARGE
+	breath_pressure = 25
+	blood_volume = 840
 
 	flags = NO_SLIP |CAN_NAB | NO_BLOCK
 	appearance_flags = 0
-	spawn_flags = SPECIES_IS_RESTRICTED
+	spawn_flags = SPECIES_CAN_JOIN | SPECIES_IS_WHITELISTED | SPECIES_NO_FBP_CONSTRUCTION | SPECIES_NO_FBP_CHARGEN
 
-	reagent_tag = IS_NABBER
+	breathing_organ = BP_TRACH
+
+	has_organ = list(    // which required-organ checks are conducted.
+		BP_BRAIN =    /obj/item/organ/internal/brain/nabber,
+		BP_EYES =     /obj/item/organ/internal/eyes/nabber,
+		BP_TRACH =    /obj/item/organ/internal/tracheae,
+		BP_HEART =    /obj/item/organ/internal/heart/nabber,
+		BP_LIVER =    /obj/item/organ/internal/liver/nabber,
+		BP_PHORON =   /obj/item/organ/internal/phoron
+		)
+
+	has_limbs = list(
+		BP_CHEST =  list("path" = /obj/item/organ/external/chest/nabber),
+		BP_GROIN =  list("path" = /obj/item/organ/external/groin/nabber),
+		BP_HEAD =   list("path" = /obj/item/organ/external/head/nabber),
+		BP_L_ARM =  list("path" = /obj/item/organ/external/arm/nabber),
+		BP_R_ARM =  list("path" = /obj/item/organ/external/arm/right/nabber),
+		BP_L_LEG =  list("path" = /obj/item/organ/external/leg/nabber),
+		BP_R_LEG =  list("path" = /obj/item/organ/external/leg/right/nabber),
+		BP_L_HAND = list("path" = /obj/item/organ/external/hand/nabber),
+		BP_R_HAND = list("path" = /obj/item/organ/external/hand/right/nabber),
+		BP_L_FOOT = list("path" = /obj/item/organ/external/foot/nabber),
+		BP_R_FOOT = list("path" = /obj/item/organ/external/foot/right/nabber)
+		)
+
+
 
 /datum/species/nabber/get_blood_name()
 	return "haemolymph"
+
+/datum/species/nabber/handle_environment_special(var/mob/living/carbon/human/H)
+	var/obj/item/organ/internal/tracheae/T = H.internal_organs_by_name[BP_TRACH]
+	var/datum/gas_mixture/breath = H.get_breath_from_environment()
+
+	if(!T && H.should_have_organ(BP_TRACH))
+		H.failed_last_breath = 1
+	else
+		H.failed_last_breath = T.handle_breath(breath) //if breath is null or vacuum, the lungs will handle it for us
+
+	if(H.failed_last_breath)
+		if(H.health > config.health_threshold_crit)
+			H.adjustOxyLoss(HUMAN_MAX_OXYLOSS)
+		else
+			H.adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS)
+
+		H.oxygen_alert = max(H.oxygen_alert, 1)
+
+
+
 
 // Nabbers are all about grabbing people for fighting, so they get cool
 // grabbing stuff and need their own object for it.
@@ -76,7 +128,7 @@
 	adjust_position()
 
 /obj/item/weapon/grab/nabber/process()
-	if(deleted(src)) // GC is trying to delete us, we'll kill our processing so we can cleanly GC
+	if(QDELETED(src)) // GC is trying to delete us, we'll kill our processing so we can cleanly GC
 		return PROCESS_KILL
 
 	if(!confirm())
@@ -98,7 +150,7 @@
 	last_hit_zone = target_zone
 
 /obj/item/weapon/grab/nabber/process()
-	if(deleted(src)) // GC is trying to delete us, we'll kill our processing so we can cleanly GC
+	if(QDELETED(src)) // GC is trying to delete us, we'll kill our processing so we can cleanly GC
 		return PROCESS_KILL
 
 	if(!confirm())
@@ -211,7 +263,7 @@
 
 
 /obj/item/weapon/grab/nabber/s_click(obj/screen/S)
-	if(deleted(src))
+	if(QDELETED(src))
 		return
 	if(!affecting)
 		return
@@ -309,7 +361,7 @@
 	adjust_position()
 
 /obj/item/weapon/grab/nabber/attack(mob/M, mob/living/user)
-	if(deleted(src))
+	if(QDELETED(src))
 		return
 	if(!affecting)
 		return
@@ -526,3 +578,12 @@
 	qdel(hud)
 	hud = null
 	..()
+
+/datum/species/nabber/handle_movement_delay_special(var/mob/living/carbon/human/H)
+	var/tally = 0
+	var/obj/item/organ/internal/B = H.internal_organs_by_name[BP_BRAIN]
+	if(istype(B,/obj/item/organ/internal/brain/nabber))
+		var/obj/item/organ/internal/brain/nabber/N = B
+
+		tally += N.lowblood_tally
+	return tally

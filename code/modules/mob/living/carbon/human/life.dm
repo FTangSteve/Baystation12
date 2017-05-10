@@ -615,9 +615,10 @@
 		nutrition = max (0, nutrition - species.hunger_factor)
 
 	if(!isSynthetic() && (species.flags & IS_PLANT))
+
 		if(nutrition < 10)
 			take_overall_damage(2,0)
-
+			to_chat(src, "<span class='warning'>nutrition?</span>")
 			//traumatic_shock is updated every tick, incrementing that is pointless - shock_stage is the counter.
 			//Not that it matters much for diona, who have NO_PAIN.
 			shock_stage++

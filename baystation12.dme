@@ -1818,6 +1818,7 @@
 #include "code\modules\organs\internal\lungs.dm"
 #include "code\modules\organs\subtypes\diona.dm"
 #include "code\modules\organs\subtypes\machine.dm"
+#include "code\modules\organs\subtypes\nabber.dm"
 #include "code\modules\organs\subtypes\resomi.dm"
 #include "code\modules\organs\subtypes\skrell.dm"
 #include "code\modules\organs\subtypes\standard.dm"

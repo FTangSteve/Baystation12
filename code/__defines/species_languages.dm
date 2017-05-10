@@ -7,8 +7,8 @@
 #define NO_POISON         0x20   // Cannot not suffer toxloss.
 #define IS_PLANT          0x40   // Is a treeperson.
 #define NO_EMBED          0x80   // Can step on broken glass with no ill-effects and cannot have shrapnel embedded in it.
-#define CAN_NAB           0x160  // Uses the special set of grab rules.
-#define NO_BLOCK          0x240  // Unable to block or defend itself from attackers.
+#define CAN_NAB           0x100  // Uses the special set of grab rules.
+#define NO_BLOCK          0x200  // Unable to block or defend itself from attackers.
 // unused: 0x8000 - higher than this will overflow
 
 // Species spawn flags

@@ -146,6 +146,7 @@
 		BP_EYES =     /obj/item/organ/internal/eyes
 		)
 	var/vision_organ              // If set, this organ is required for vision. Defaults to "eyes" if the species has them.
+	var/breathing_organ           // If set, this organ is required for breathing. Defaults to "lungs" if the species has them.
 
 	var/list/has_limbs = list(
 		BP_CHEST =  list("path" = /obj/item/organ/external/chest),
@@ -183,6 +184,9 @@
 	//If the species has eyes, they are the default vision organ
 	if(!vision_organ && has_organ[BP_EYES])
 		vision_organ = BP_EYES
+	//If the species has lungs, they are the default breathing organ
+	if(!breathing_organ && has_organ[BP_LUNGS])
+		vision_organ = BP_LUNGS
 
 	unarmed_attacks = list()
 	for(var/u_type in unarmed_types)
@@ -286,6 +290,9 @@
 // Only used for alien plasma weeds atm, but could be used for Dionaea later.
 /datum/species/proc/handle_environment_special(var/mob/living/carbon/human/H)
 	return
+
+/datum/species/proc/handle_movement_delay_special(var/mob/living/carbon/human/H)
+	return 0
 
 // Used to update alien icons for aliens.
 /datum/species/proc/handle_login_special(var/mob/living/carbon/human/H)
