@@ -21,6 +21,7 @@
 	darksight = 8
 	slowdown = -0.5
 	rarity_value = 4
+	hud_type = /datum/hud_data/nabber
 	total_health = 150
 	brute_mod = 0.85
 	burn_mod =  1.35
@@ -58,6 +59,10 @@
 		BP_R_FOOT = list("path" = /obj/item/organ/external/foot/right/nabber)
 		)
 
+	inherent_verbs = list(
+		/mob/living/carbon/human/proc/nab,
+		/mob/living/carbon/human/proc/active_camo
+		)
 
 
 /datum/species/nabber/get_blood_name()
@@ -88,13 +93,16 @@
 /obj/item/weapon/grab/nabber
 	var/has_been_neck = 0
 	var/attacking = 0
+	var/from_special = 0
 	state = GRAB_AGGRESSIVE
 
-/obj/item/weapon/grab/nabber/New(mob/user, mob/victim)
+/obj/item/weapon/grab/nabber/New(mob/user, mob/victim, var/special = 0)
 
 	loc = user
 	assailant = user
 	affecting = victim
+
+	from_special = special
 
 	if(affecting.anchored || !assailant.Adjacent(victim)) //Shouldn't even be created if these aren't met
 		return
@@ -127,6 +135,22 @@
 
 	assailant.set_dir(get_dir(assailant, affecting))
 	last_action = world.time
+
+	if(from_special)
+		state = GRAB_NECK
+		icon_state = "grabbed+1"
+		assailant.set_dir(get_dir(assailant, affecting))
+		admin_attack_log(assailant, affecting, "Grabbed the neck of their victim.", "Had their neck grabbed", "grabbed the neck of")
+
+		hud.icon_state = "kill"
+		hud.name = "kill"
+		affecting.Stun(10) //10 ticks of ensured grab
+		if(!has_been_neck)
+			var/armor = affecting.run_armor_check(BP_CHEST, "melee")
+			affecting.apply_damage(15, BRUTE, BP_CHEST, armor, DAM_SHARP, "organic punctures")
+			affecting.visible_message("<span class='danger'>[assailant]'s spikes dig in painfully!</span>")
+			has_been_neck = 1
+
 	adjust_position()
 
 /obj/item/weapon/grab/nabber/process()
@@ -306,6 +330,7 @@
 				icon_state = "grabbed1"
 				hud.name = "reinforce grab"
 				state = GRAB_AGGRESSIVE
+				has_been_neck = 1
 
 			if(GRAB_KILL) //downgrade to GRAB_NECK
 				assailant.visible_message("<span class='notice'>[assailant] has relaxed \his grip on [affecting], no longer crushing them.</span>")
@@ -581,8 +606,6 @@
 		if(assailant.client)
 			assailant.client.screen -= hud
 		assailant = null
-	qdel(hud)
-	hud = null
 	..()
 
 /datum/species/nabber/can_shred(var/mob/living/carbon/human/H, var/ignore_intent)
@@ -593,9 +616,17 @@
 
 /datum/species/nabber/handle_movement_delay_special(var/mob/living/carbon/human/H)
 	var/tally = 0
+
+	if(H.cloaked)
+		H.visible_message("<span class='danger'>[H] suddenly appears!</span>")
+		H.cloaked = 0
+
+	H.update_icons()
+
 	var/obj/item/organ/internal/B = H.internal_organs_by_name[BP_BRAIN]
 	if(istype(B,/obj/item/organ/internal/brain/nabber))
 		var/obj/item/organ/internal/brain/nabber/N = B
 
 		tally += N.lowblood_tally
+
 	return tally
