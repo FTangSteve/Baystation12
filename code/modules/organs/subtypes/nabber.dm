@@ -50,17 +50,13 @@
 
 	var/dexalin_volume_raw = owner.reagents.get_reagent_amount("dexalin")
 	var/phoron_volume_raw = owner.reagents.get_reagent_amount("phoron")
-	var/acetone_volume_raw = owner.reagents.get_reagent_amount("acetone")
-	message_admins("Dex: [dexalin_volume_raw]. Phoron: [phoron_volume_raw]. Acetone:[acetone_volume_raw]")
 
 	if((dexalin_volume_raw < dexalin_level || !dexalin_volume_raw) && (phoron_volume_raw < phoron_level || !phoron_volume_raw))
-		message_admins("We're here now")
 		var/datum/reagents/temp = new/datum/reagents(1)
 		temp.add_reagent("phoron", 1)
 		temp.trans_to_mob(owner, amount, CHEM_BLOOD,, 1)
 		dexalin_volume_raw = owner.reagents.get_reagent_amount("dexalin")
 		phoron_volume_raw = owner.reagents.get_reagent_amount("phoron")
-		message_admins("Second Dex: [dexalin_volume_raw]. Phoron: [phoron_volume_raw]")
 	..()
 
 /obj/item/organ/internal/liver/nabber
@@ -125,9 +121,7 @@
 		return 1
 
 	var/breath_pressure = breath.total_moles*R_IDEAL_GAS_EQUATION*breath.temperature/BREATH_VOLUME
-	//exposure to extreme pressures can rupture lungs
-	if(breath_pressure < species.hazard_low_pressure || breath_pressure > species.hazard_high_pressure)
-		var/datum/gas_mixture/environment = loc.return_air_for_internal_lifeform()
+
 	if(breath.total_moles == 0)
 		return 1
 
