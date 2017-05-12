@@ -82,6 +82,7 @@
 	var/pulling_punches    // Are you trying not to hurt your opponent?
 	var/full_prosthetic    // We are a robutt.
 	var/robolimb_count = 0 // Number of robot limbs.
+	var/last_attack = 0    // The world_time where an unarmed attack was done
 
 	mob_bump_flag = HUMAN
 	mob_push_flags = ~HEAVY

@@ -164,4 +164,4 @@
 	var/memory = ""
 	var/flavor_text = ""
 
-	var/nabbing  // Whether a creature with a CAN_NAB tag is grabbing normally or in nab mode.
+	var/nabbing = 0  // Whether a creature with a CAN_NAB tag is grabbing normally or in nab mode.

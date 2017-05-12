@@ -1,6 +1,7 @@
 /datum/species/nabber
 	name = SPECIES_NABBER
 	name_plural = "Nab-PlaceHolders"
+	unarmed_types = list(/datum/unarmed_attack/nabber)
 	blurb = "A race of large insectoid creatures."
 
 	warning_low_pressure = 50
@@ -19,6 +20,7 @@
 
 	darksight = 8
 	slowdown = -0.5
+	rarity_value = 4
 	total_health = 150
 	brute_mod = 0.85
 	burn_mod =  1.35
@@ -519,6 +521,10 @@
 		hud.icon_state = "kill"
 		state = GRAB_NECK
 
+/datum/species/nabber/handle_pre_spawn(var/mob/living/carbon/human/H)
+	H.pull_punches()
+	return
+
 /obj/item/weapon/grab/nabber/handle_resist()
 	var/grab_name = "grip"
 	var/break_strength = 1
@@ -578,6 +584,12 @@
 	qdel(hud)
 	hud = null
 	..()
+
+/datum/species/nabber/can_shred(var/mob/living/carbon/human/H, var/ignore_intent)
+	if(!H.handcuffed || H.buckled)
+		return ..()
+	else
+		return 0
 
 /datum/species/nabber/handle_movement_delay_special(var/mob/living/carbon/human/H)
 	var/tally = 0

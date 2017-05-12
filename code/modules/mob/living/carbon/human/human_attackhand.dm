@@ -137,6 +137,16 @@
 			var/hit_zone = H.zone_sel.selecting
 			var/obj/item/organ/external/affecting = get_organ(hit_zone)
 
+			// See what attack they use
+			var/datum/unarmed_attack/attack = H.get_unarmed_attack(src, hit_zone)
+			if(!attack)
+				return 0
+			if(world.time < H.last_attack + attack.delay)
+				to_chat(H, "<span class='notice'>You can't attack again so soon.</span>")
+				return 0
+			else
+				H.last_attack = world.time
+
 			if(!affecting || affecting.is_stump())
 				to_chat(M, "<span class='danger'>They are missing that limb!</span>")
 				return 1
@@ -200,11 +210,6 @@
 			if(!miss_type && block)
 				attack_message = "[H] went for [src]'s [affecting.name] but was blocked!"
 				miss_type = 2
-
-			// See what attack they use
-			var/datum/unarmed_attack/attack = H.get_unarmed_attack(src, hit_zone)
-			if(!attack)
-				return 0
 
 			H.do_attack_animation(src)
 			if(!attack_message)
