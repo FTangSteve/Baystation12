@@ -1100,6 +1100,8 @@
 			remove_language(species.language)
 		if(species.default_language)
 			remove_language(species.default_language)
+		for(var/datum/language/L in species.assisted_langs)
+			remove_language(L)
 		// Clear out their species abilities.
 		species.remove_inherent_verbs(src)
 		holder_type = null
@@ -1109,7 +1111,11 @@
 
 	if(species.language)
 		add_language(species.language)
+		species_language = all_languages[species.language]
 
+	for(var/L in species.assisted_langs)
+		assisted_languages += all_languages[L]
+		add_language(L)
 	if(species.default_language)
 		add_language(species.default_language)
 

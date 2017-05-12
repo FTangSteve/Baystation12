@@ -209,3 +209,10 @@
 	colour = "tajaran"
 	key = "l"
 	flags = WHITELISTED | SIGNLANG | NO_STUTTER | NONVERBAL
+
+/datum/language/nabber
+	name = LANGUAGE_NABBER
+	desc = "A strange language that can be understood both by the sounds made and by the movement needed to create those sounds."
+	key = "n"
+	flags = RESTRICTED
+	colour = "soghun"

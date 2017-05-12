@@ -4,6 +4,12 @@
 /obj/item/organ/internal/voicebox/nabber
 	name = "vocal synthesiser"
 	parent_organ = BP_CHEST
+	organ_tag = BP_VOICE
+	will_assist_languages = list(LANGUAGE_GALCOM)
+
+/obj/item/organ/internal/voicebox/nabber/New()
+	for(var/L in will_assist_languages)
+		assists_languages += all_languages[L]
 
 
 /obj/item/organ/internal/eyes/nabber

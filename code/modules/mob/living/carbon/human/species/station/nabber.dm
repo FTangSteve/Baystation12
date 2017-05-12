@@ -1,8 +1,14 @@
 /datum/species/nabber
 	name = SPECIES_NABBER
 	name_plural = "Nab-PlaceHolders"
-	unarmed_types = list(/datum/unarmed_attack/nabber)
 	blurb = "A race of large insectoid creatures."
+
+	language = LANGUAGE_NABBER
+	default_language = LANGUAGE_NABBER
+	assisted_langs = list(LANGUAGE_GALCOM)
+	min_age = 8
+	max_age = 40
+
 
 	warning_low_pressure = 50
 	hazard_low_pressure = -1
@@ -29,6 +35,7 @@
 	mob_size = MOB_LARGE
 	breath_pressure = 25
 	blood_volume = 840
+	spawns_with_stack = 0
 
 	flags = NO_SLIP |CAN_NAB | NO_BLOCK
 	appearance_flags = 0
@@ -42,7 +49,8 @@
 		BP_TRACH =    /obj/item/organ/internal/tracheae,
 		BP_HEART =    /obj/item/organ/internal/heart/nabber,
 		BP_LIVER =    /obj/item/organ/internal/liver/nabber,
-		BP_PHORON =   /obj/item/organ/internal/phoron
+		BP_PHORON =   /obj/item/organ/internal/phoron,
+		BP_VOICE =    /obj/item/organ/internal/voicebox/nabber
 		)
 
 	has_limbs = list(
@@ -58,6 +66,8 @@
 		BP_L_FOOT = list("path" = /obj/item/organ/external/foot/nabber),
 		BP_R_FOOT = list("path" = /obj/item/organ/external/foot/right/nabber)
 		)
+
+	unarmed_types = list(/datum/unarmed_attack/nabber)
 
 	inherent_verbs = list(
 		/mob/living/carbon/human/proc/nab,

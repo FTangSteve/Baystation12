@@ -7,6 +7,10 @@
 	var/dead_icon // Icon to use when the organ has died.
 	var/surface_accessible = FALSE
 
+	var/assists_languages = list()
+	var/will_assist_languages = list()
+
+
 /obj/item/organ/internal/New(var/mob/living/carbon/holder)
 	..()
 	if(istype(holder))
