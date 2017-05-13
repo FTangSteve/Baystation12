@@ -89,14 +89,11 @@
 
 	if(H.failed_last_breath)
 		if(H.health > config.health_threshold_crit)
-			H.adjustOxyLoss(HUMAN_MAX_OXYLOSS)
+			H.adjustOxyLoss(4 * H.breath_fail_ratio)
 		else
-			H.adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS)
+			H.adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS * H.breath_fail_ratio)
 
 		H.oxygen_alert = max(H.oxygen_alert, 1)
-
-
-
 
 // Nabbers are all about grabbing people for fighting, so they get cool
 // grabbing stuff and need their own object for it.

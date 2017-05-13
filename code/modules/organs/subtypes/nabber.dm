@@ -76,10 +76,9 @@
 	else if(is_bruised())
 		amount *= 0.1
 
-	var/datum/gas_mixture/breath = owner.get_breath_from_environment()
 	var/acetone_volume_raw = owner.reagents.get_reagent_amount("acetone")
 
-	if((acetone_volume_raw < acetone_level || !acetone_volume_raw) && breath)
+	if((acetone_volume_raw < acetone_level || !acetone_volume_raw) && owner.breath_fail_ratio < 0.25)
 		var/datum/reagents/temp = new/datum/reagents(1)
 		temp.add_reagent("acetone", 1)
 		temp.trans_to_mob(owner, amount, CHEM_BLOOD,, 1)
@@ -148,12 +147,13 @@
 	var/inhale_pp = (inhaling/breath.total_moles)*breath_pressure
 	var/toxins_pp = (poison/breath.total_moles)*breath_pressure
 	var/exhaled_pp = (exhaling/breath.total_moles)*breath_pressure
+
 	// Not enough to breathe
 	if(inhale_pp < safe_pressure_min)
-
-		var/ratio = inhale_pp/safe_pressure_min
-		owner.adjustOxyLoss(max(HUMAN_MAX_OXYLOSS*(1-ratio), 0))	// Don't fuck them up too fast (space only does HUMAN_MAX_OXYLOSS after all!)
+		owner.breath_fail_ratio = 1 - inhale_pp/safe_pressure_min
 		failed_inhale = 1
+	else
+		owner.breath_fail_ratio = 0
 
 	owner.oxygen_alert = failed_inhale
 
@@ -228,7 +228,7 @@
 
 	handle_temperature_effects(breath)
 	breath.update_values()
-	return failed_breath
+	return failed_inhale
 
 /obj/item/organ/internal/tracheae/proc/handle_temperature_effects(datum/gas_mixture/breath)
 	// Hot air hurts :(
