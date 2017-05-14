@@ -113,9 +113,10 @@
 	path = /obj/item/clothing/under/resomi/science
 
 /datum/gear/uniform/harness
-	display_name = "gear harness (Full Body Prosthetic, Diona)"
+	display_name = "gear harness (Full Body Prosthetic, Diona, Nabber)"
 	path = /obj/item/clothing/under/harness
 	sort_category = "Xenowear"
+	species_restricted = null
 
 /datum/gear/mask/ipc_monitor
 	display_name = "display monitor (IPC)"

@@ -155,8 +155,6 @@
 	else
 		owner.breath_fail_ratio = 0
 
-	owner.oxygen_alert = failed_inhale
-
 	var/inhaled_gas_used = inhaling/6
 	breath.adjust_gas(breath_type, -inhaled_gas_used, update = 0) //update afterwards
 
@@ -305,6 +303,8 @@
 /obj/item/organ/internal/brain/nabber
 	var lowblood_tally = 0
 	var lowblood_mult = 2
+	name = "distributed nervous system"
+	parent_organ = BP_CHEST
 
 
 /obj/item/organ/internal/brain/nabber/process()

@@ -20,9 +20,9 @@
 
 	reagent_tag = IS_NABBER
 
-	icon_template = 'icons/mob/human_races/r_nabber.dmi'
+	icon_template = 'icons/mob/human_races/r_nabber_template.dmi'
 	icobase = 'icons/mob/human_races/r_nabber.dmi'
-	deform = 'icons/mob/human_races/r_nabber.dmi'
+//	deform = 'icons/mob/human_races/r_nabber.dmi'
 
 	darksight = 8
 	slowdown = -0.5
@@ -54,15 +54,15 @@
 		)
 
 	has_limbs = list(
+		BP_L_ARM =  list("path" = /obj/item/organ/external/arm/nabber),
+		BP_L_HAND = list("path" = /obj/item/organ/external/hand/nabber),
 		BP_CHEST =  list("path" = /obj/item/organ/external/chest/nabber),
 		BP_GROIN =  list("path" = /obj/item/organ/external/groin/nabber),
 		BP_HEAD =   list("path" = /obj/item/organ/external/head/nabber),
-		BP_L_ARM =  list("path" = /obj/item/organ/external/arm/nabber),
 		BP_R_ARM =  list("path" = /obj/item/organ/external/arm/right/nabber),
-		BP_L_LEG =  list("path" = /obj/item/organ/external/leg/nabber),
-		BP_R_LEG =  list("path" = /obj/item/organ/external/leg/right/nabber),
-		BP_L_HAND = list("path" = /obj/item/organ/external/hand/nabber),
 		BP_R_HAND = list("path" = /obj/item/organ/external/hand/right/nabber),
+		BP_R_LEG =  list("path" = /obj/item/organ/external/leg/right/nabber),
+		BP_L_LEG =  list("path" = /obj/item/organ/external/leg/nabber),
 		BP_L_FOOT = list("path" = /obj/item/organ/external/foot/nabber),
 		BP_R_FOOT = list("path" = /obj/item/organ/external/foot/right/nabber)
 		)
@@ -89,11 +89,17 @@
 
 	if(H.failed_last_breath)
 		if(H.health > config.health_threshold_crit)
-			H.adjustOxyLoss(4 * H.breath_fail_ratio)
+			H.adjustOxyLoss(2 * H.breath_fail_ratio)
 		else
 			H.adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS * H.breath_fail_ratio)
 
-		H.oxygen_alert = max(H.oxygen_alert, 1)
+		if(H.breath_fail_ratio > 0.175)
+			H.oxygen_alert = max(H.oxygen_alert, 1)
+		else
+			H.oxygen_alert = 0
+
+	else
+		H.oxygen_alert = 0
 
 // Nabbers are all about grabbing people for fighting, so they get cool
 // grabbing stuff and need their own object for it.
