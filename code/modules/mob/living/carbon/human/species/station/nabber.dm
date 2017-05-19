@@ -51,7 +51,7 @@
 	has_organ = list(    // which required-organ checks are conducted.
 		BP_BRAIN =    /obj/item/organ/internal/brain/nabber,
 		BP_EYES =     /obj/item/organ/internal/eyes/nabber,
-		BP_TRACH =    /obj/item/organ/internal/tracheae,
+		BP_TRACH =    /obj/item/organ/internal/respirator/tracheae,
 		BP_HEART =    /obj/item/organ/internal/heart/nabber,
 		BP_LIVER =    /obj/item/organ/internal/liver/nabber,
 		BP_PHORON =   /obj/item/organ/internal/phoron,
@@ -84,7 +84,7 @@
 	return "haemolymph"
 
 /datum/species/nabber/handle_environment_special(var/mob/living/carbon/human/H)
-	var/obj/item/organ/internal/tracheae/T = H.internal_organs_by_name[BP_TRACH]
+	var/obj/item/organ/internal/respirator/tracheae/T = H.internal_organs_by_name[BP_TRACH]
 	var/datum/gas_mixture/breath = H.get_breath_from_environment()
 
 	if(!T && H.should_have_organ(BP_TRACH))

@@ -21,7 +21,7 @@
 	// These should be subtypes of /obj/item/organ
 	var/list/products = list(
 		BP_HEART   = list(/obj/item/organ/internal/heart,  25),
-		BP_LUNGS   = list(/obj/item/organ/internal/lungs,  25),
+		BP_LUNGS   = list(/obj/item/organ/internal/respirator/lungs,  25),
 		BP_KIDNEYS = list(/obj/item/organ/internal/kidneys,20),
 		BP_EYES    = list(/obj/item/organ/internal/eyes,   20),
 		BP_LIVER   = list(/obj/item/organ/internal/liver,  25),

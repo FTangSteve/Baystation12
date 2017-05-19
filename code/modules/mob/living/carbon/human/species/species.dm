@@ -139,7 +139,7 @@
 	                              // Determines the organs that the species spawns with and
 	var/list/has_organ = list(    // which required-organ checks are conducted.
 		BP_HEART =    /obj/item/organ/internal/heart,
-		BP_LUNGS =    /obj/item/organ/internal/lungs,
+		BP_LUNGS =    /obj/item/organ/internal/respirator/lungs,
 		BP_LIVER =    /obj/item/organ/internal/liver,
 		BP_KIDNEYS =  /obj/item/organ/internal/kidneys,
 		BP_BRAIN =    /obj/item/organ/internal/brain,
@@ -187,7 +187,7 @@
 		vision_organ = BP_EYES
 	//If the species has lungs, they are the default breathing organ
 	if(!breathing_organ && has_organ[BP_LUNGS])
-		vision_organ = BP_LUNGS
+		breathing_organ = BP_LUNGS
 
 	unarmed_attacks = list()
 	for(var/u_type in unarmed_types)

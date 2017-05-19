@@ -1,9 +1,11 @@
-/obj/item/organ/internal/lungs
-	name = "lungs"
+/obj/item/organ/internal/respirator
+	name = "respirator"
 	icon_state = "lungs"
 	gender = PLURAL
-	organ_tag = "lungs"
+	organ_tag = BP_RESP
 	parent_organ = BP_CHEST
+
+	var/active_breathing = 1
 
 	var/breath_type
 	var/poison_type
@@ -17,60 +19,68 @@
 	var/SA_sleep_min = 5
 	var/breathing = 0
 
-/obj/item/organ/internal/lungs/robotize()
+/obj/item/organ/internal/respirator/lungs
+	name = "lungs"
+	icon_state = "lungs"
+	gender = PLURAL
+	organ_tag = BP_LUNGS
+
+/obj/item/organ/internal/respirator/robotize()
 	. = ..()
 	icon_state = "lungs-prosthetic"
 
-/obj/item/organ/internal/lungs/set_dna(var/datum/dna/new_dna)
+/obj/item/organ/internal/respirator/set_dna(var/datum/dna/new_dna)
 	..()
 	sync_breath_types()
 
-/obj/item/organ/internal/lungs/replaced()
+/obj/item/organ/internal/respirator/replaced()
 	..()
 	sync_breath_types()
 
 /**
  *  Set these lungs' breath types based on the lungs' species
  */
-/obj/item/organ/internal/lungs/proc/sync_breath_types()
+/obj/item/organ/internal/respirator/proc/sync_breath_types()
 	min_breath_pressure = species.breath_pressure
 	breath_type = species.breath_type ? species.breath_type : "oxygen"
 	poison_type = species.poison_type ? species.poison_type : "phoron"
 	exhale_type = species.exhale_type ? species.exhale_type : "carbon_dioxide"
 
-/obj/item/organ/internal/lungs/process()
+/obj/item/organ/internal/respirator/process()
 	..()
 
 	if(!owner)
 		return
 
-	if (germ_level > INFECTION_LEVEL_ONE)
+	if (germ_level > INFECTION_LEVEL_ONE && active_breathing)
 		if(prob(5))
 			owner.emote("cough")		//respitory tract infection
 
 	if(is_bruised())
 		if(prob(2))
-			owner.visible_message(
-				"<B>\The [owner]</B> coughs up blood!",
-				"<span class='warning'>You cough up blood!</span>",
-				"You hear someone coughing!",
-			)
+			if(active_breathing)
+				owner.visible_message(
+					"<B>\The [owner]</B> coughs up blood!",
+					"<span class='warning'>You cough up blood!</span>",
+					"You hear someone coughing!",
+				)
 			owner.drip(10)
 		if(prob(4))
-			owner.visible_message(
-				"<B>\The [owner]</B> gasps for air!",
-				"<span class='danger'>You can't breathe!</span>",
-				"You hear someone gasp for air!",
-			)
+			if(active_breathing)
+				owner.visible_message(
+					"<B>\The [owner]</B> gasps for air!",
+					"<span class='danger'>You can't breathe!</span>",
+					"You hear someone gasp for air!",
+				)
 			owner.losebreath += 15
 
-/obj/item/organ/internal/lungs/proc/rupture()
+/obj/item/organ/internal/respirator/proc/rupture()
 	var/obj/item/organ/external/parent = owner.get_organ(parent_organ)
 	if(istype(parent))
 		owner.custom_pain("You feel a stabbing pain in your [parent.name]!", 50, affecting = parent)
 	bruise()
 
-/obj/item/organ/internal/lungs/proc/handle_breath(datum/gas_mixture/breath)
+/obj/item/organ/internal/respirator/proc/handle_breath(datum/gas_mixture/breath)
 	if(!owner)
 		return 1
 	if(!breath)
@@ -105,14 +115,16 @@
 	var/inhale_pp = (inhaling/breath.total_moles)*breath_pressure
 	var/toxins_pp = (poison/breath.total_moles)*breath_pressure
 	var/exhaled_pp = (exhaling/breath.total_moles)*breath_pressure
+
 	// Not enough to breathe
 	if(inhale_pp < safe_pressure_min)
-		if(prob(20))
+		if(prob(20) && active_breathing)
 			owner.emote("gasp")
 
-		var/ratio = inhale_pp/safe_pressure_min
-		owner.adjustOxyLoss(max(HUMAN_MAX_OXYLOSS*(1-ratio), 0))	// Don't fuck them up too fast (space only does HUMAN_MAX_OXYLOSS after all!)
+		owner.breath_fail_ratio = 1 - inhale_pp/safe_pressure_min
 		failed_inhale = 1
+	else
+		owner.breath_fail_ratio = 0
 
 	owner.oxygen_alert = failed_inhale
 
@@ -186,11 +198,12 @@
 				breathing = 1
 
 	handle_temperature_effects(breath)
+	owner.adjustOxyLoss(max(HUMAN_MAX_OXYLOSS*(owner.breath_fail_ratio), 0))
 
 	breath.update_values()
 	return failed_breath
 
-/obj/item/organ/internal/lungs/proc/handle_temperature_effects(datum/gas_mixture/breath)
+/obj/item/organ/internal/respirator/proc/handle_temperature_effects(datum/gas_mixture/breath)
 	// Hot air hurts :(
 	if((breath.temperature < species.cold_level_1 || breath.temperature > species.heat_level_1) && !(COLD_RESISTANCE in owner.mutations))
 		var/damage = 0

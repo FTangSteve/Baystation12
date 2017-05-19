@@ -348,7 +348,7 @@
 	if(status_flags & GODMODE)
 		return
 
-	var/obj/item/organ/internal/lungs/L = internal_organs_by_name[BP_LUNGS]
+	var/obj/item/organ/internal/respirator/lungs/L = internal_organs_by_name[BP_LUNGS]
 	if(!L && should_have_organ(BP_LUNGS))
 		failed_last_breath = 1
 	else
