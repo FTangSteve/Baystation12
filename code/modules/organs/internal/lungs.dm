@@ -1,8 +1,8 @@
-/obj/item/organ/internal/respirator
-	name = "respirator"
+/obj/item/organ/internal/lungs
+	name = "lungs"
 	icon_state = "lungs"
 	gender = PLURAL
-	organ_tag = BP_RESP
+	organ_tag = BP_LUNGS
 	parent_organ = BP_CHEST
 
 	var/active_breathing = 1
@@ -19,36 +19,29 @@
 	var/SA_sleep_min = 5
 	var/breathing = 0
 
-/obj/item/organ/internal/respirator/lungs
-	name = "lungs"
-	icon_state = "lungs"
-	gender = PLURAL
-	organ_tag = BP_LUNGS
-
-/obj/item/organ/internal/respirator/robotize()
+/obj/item/organ/internal/lungs/robotize()
 	. = ..()
 	icon_state = "lungs-prosthetic"
 
-/obj/item/organ/internal/respirator/set_dna(var/datum/dna/new_dna)
+/obj/item/organ/internal/lungs/set_dna(var/datum/dna/new_dna)
 	..()
 	sync_breath_types()
 
-/obj/item/organ/internal/respirator/replaced()
+/obj/item/organ/internal/lungs/replaced()
 	..()
 	sync_breath_types()
 
 /**
  *  Set these lungs' breath types based on the lungs' species
  */
-/obj/item/organ/internal/respirator/proc/sync_breath_types()
+/obj/item/organ/internal/lungs/proc/sync_breath_types()
 	min_breath_pressure = species.breath_pressure
 	breath_type = species.breath_type ? species.breath_type : "oxygen"
 	poison_type = species.poison_type ? species.poison_type : "phoron"
 	exhale_type = species.exhale_type ? species.exhale_type : "carbon_dioxide"
 
-/obj/item/organ/internal/respirator/process()
+/obj/item/organ/internal/lungs/process()
 	..()
-
 	if(!owner)
 		return
 
@@ -64,6 +57,11 @@
 					"<span class='warning'>You cough up blood!</span>",
 					"You hear someone coughing!",
 				)
+			else
+				owner.visible_message(
+					"blood drips from <B>\the [owner]'s</B> [parent_organ]!",
+				)
+
 			owner.drip(10)
 		if(prob(4))
 			if(active_breathing)
@@ -72,18 +70,23 @@
 					"<span class='danger'>You can't breathe!</span>",
 					"You hear someone gasp for air!",
 				)
+			else
+				to_chat(owner, "<span class='danger'>You're having trouble getting enough [breath_type]!</span>")
+
 			owner.losebreath += 15
 
-/obj/item/organ/internal/respirator/proc/rupture()
+/obj/item/organ/internal/lungs/proc/rupture()
 	var/obj/item/organ/external/parent = owner.get_organ(parent_organ)
 	if(istype(parent))
 		owner.custom_pain("You feel a stabbing pain in your [parent.name]!", 50, affecting = parent)
 	bruise()
 
-/obj/item/organ/internal/respirator/proc/handle_breath(datum/gas_mixture/breath)
+/obj/item/organ/internal/lungs/proc/handle_breath(datum/gas_mixture/breath)
 	if(!owner)
 		return 1
 	if(!breath)
+		owner.breath_fail_ratio = 1
+		handle_failed_breath()
 		return 1
 
 	var/breath_pressure = breath.total_moles*R_IDEAL_GAS_EQUATION*breath.temperature/BREATH_VOLUME
@@ -95,6 +98,8 @@
 			if(!is_bruised() && prob(5)) //only rupture if NOT already ruptured
 				rupture()
 	if(breath.total_moles == 0)
+		owner.breath_fail_ratio = 1
+		handle_failed_breath()
 		return 1
 
 	var/safe_pressure_min = min_breath_pressure // Minimum safe partial pressure of breathable gas in kPa
@@ -201,9 +206,25 @@
 	owner.adjustOxyLoss(max(HUMAN_MAX_OXYLOSS*(owner.breath_fail_ratio), 0))
 
 	breath.update_values()
+
+	if(failed_breath)
+		handle_failed_breath()
+	else
+		owner.oxygen_alert = 0
 	return failed_breath
 
-/obj/item/organ/internal/respirator/proc/handle_temperature_effects(datum/gas_mixture/breath)
+/obj/item/organ/internal/lungs/proc/handle_failed_breath()
+	if(prob(20) && active_breathing)
+		owner.emote("gasp")
+
+	if(owner.health > config.health_threshold_crit)
+		owner.adjustOxyLoss(HUMAN_MAX_OXYLOSS)
+	else
+		owner.adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS)
+
+	owner.oxygen_alert = max(owner.oxygen_alert, 1)
+
+/obj/item/organ/internal/lungs/proc/handle_temperature_effects(datum/gas_mixture/breath)
 	// Hot air hurts :(
 	if((breath.temperature < species.cold_level_1 || breath.temperature > species.heat_level_1) && !(COLD_RESISTANCE in owner.mutations))
 		var/damage = 0

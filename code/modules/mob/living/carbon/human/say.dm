@@ -199,7 +199,7 @@
 	if(speaking in src.assisted_languages)
 		needs_assist = 1
 		for(var/obj/item/organ/internal/I in src.internal_organs)
-			if((speaking in I.assists_languages) && !(I.is_broken() || I.is_bruised()))
+			if((speaking in I.assists_languages) && !(I.is_usable()))
 				can_speak_assist = 1
 
 	if(needs_assist && !can_speak_assist)

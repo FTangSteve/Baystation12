@@ -7,7 +7,7 @@
 	dead_icon = null
 	parent_organ = BP_GROIN
 
-/obj/item/organ/internal/respirator/lungs/vox
+/obj/item/organ/internal/lungs/vox
 	name = "air capillary sack" //Like birds, Vox absorb gas via air capillaries.
 	icon_state = "vox lung"
 

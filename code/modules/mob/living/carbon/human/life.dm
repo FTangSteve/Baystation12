@@ -95,7 +95,9 @@
 	return 1
 
 /mob/living/carbon/human/breathe()
-	if(!in_stasis)
+	var/species_organ = species.breathing_organ
+
+	if(!in_stasis && species_organ)
 		..()
 
 // Calculate how vulnerable the human is to under- and overpressure.
@@ -347,24 +349,17 @@
 /mob/living/carbon/human/handle_breath(datum/gas_mixture/breath)
 	if(status_flags & GODMODE)
 		return
+	var/species_organ = species.breathing_organ
+	if(!species_organ)
+		return
 
-	var/obj/item/organ/internal/respirator/lungs/L = internal_organs_by_name[BP_LUNGS]
-	if(!L && should_have_organ(BP_LUNGS))
+	var/obj/item/organ/internal/lungs/L = internal_organs_by_name[species_organ]
+	if(!L)
 		failed_last_breath = 1
 	else
 		failed_last_breath = L.handle_breath(breath) //if breath is null or vacuum, the lungs will handle it for us
+	return !failed_last_breath
 
-	if(failed_last_breath)
-		if(prob(20))
-			emote("gasp")
-		if(health > config.health_threshold_crit)
-			adjustOxyLoss(HUMAN_MAX_OXYLOSS)
-		else
-			adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS)
-
-		oxygen_alert = max(oxygen_alert, 1)
-		return 0
-	return 1
 
 /mob/living/carbon/human/handle_environment(datum/gas_mixture/environment)
 	if(!environment)

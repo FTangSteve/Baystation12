@@ -44,7 +44,6 @@
 #define PULSE_FAST    3 //  90-120 bpm
 #define PULSE_2FAST   4 // >120    bpm
 #define PULSE_THREADY 5 // Occurs during hypovolemic shock
-#define PULSE_OPEN    6 // Can occur for species with open circulatory systems
 #define GETPULSE_HAND 0 // Less accurate. (hand)
 #define GETPULSE_TOOL 1 // More accurate. (med scanner, sleeper, etc.)
 
@@ -155,7 +154,6 @@
 #define BP_MOUTH    "mouth"
 #define BP_EYES     "eyes"
 #define BP_HEART    "heart"
-#define BP_RESP		"respirator"
 #define BP_LUNGS    "lungs"
 #define BP_TRACH	"tracheae"
 #define BP_BRAIN    "brain"

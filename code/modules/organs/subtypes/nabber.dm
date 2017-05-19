@@ -2,6 +2,8 @@
 
 
 /obj/item/organ/internal/voicebox/nabber
+	robotic = ORGAN_ROBOT
+	status = 0
 	name = "vocal synthesiser"
 	parent_organ = BP_CHEST
 	organ_tag = BP_VOICE
@@ -58,11 +60,7 @@
 	var/phoron_volume_raw = owner.reagents.get_reagent_amount("phoron")
 
 	if((dexalin_volume_raw < dexalin_level || !dexalin_volume_raw) && (phoron_volume_raw < phoron_level || !phoron_volume_raw))
-		var/datum/reagents/temp = new/datum/reagents(1)
-		temp.add_reagent("phoron", 1)
-		temp.trans_to_mob(owner, amount, CHEM_BLOOD,, 1)
-		dexalin_volume_raw = owner.reagents.get_reagent_amount("dexalin")
-		phoron_volume_raw = owner.reagents.get_reagent_amount("phoron")
+		owner.reagents.add_reagent("phoron", amount)
 	..()
 
 /obj/item/organ/internal/liver/nabber
@@ -79,12 +77,11 @@
 	var/acetone_volume_raw = owner.reagents.get_reagent_amount("acetone")
 
 	if((acetone_volume_raw < acetone_level || !acetone_volume_raw) && owner.breath_fail_ratio < 0.25)
-		var/datum/reagents/temp = new/datum/reagents(1)
-		temp.add_reagent("acetone", 1)
-		temp.trans_to_mob(owner, amount, CHEM_BLOOD,, 1)
+		owner.reagents.add_reagent("acetone", amount)
 	..()
 
-/obj/item/organ/internal/respirator/tracheae
+// These are not actually lungs and shouldn't be thought of as such despite the claims of the parent.
+/obj/item/organ/internal/lungs/nabber
 	name = "tracheae"
 	icon_state = "lungs"
 	gender = PLURAL
@@ -97,22 +94,21 @@
 
 	safe_toxins_max = 10
 
+/obj/item/organ/internal/lungs/nabber/handle_failed_breath()
+	var/mob/living/carbon/human/H = owner
 
-/obj/item/organ/internal/heart/nabber/handle_pulse()
-	if(owner.stat == DEAD || robotic >= ORGAN_ROBOT)
-		pulse = PULSE_NONE	//that's it, you're dead (or your metal heart is), nothing can influence your pulse
-		return
-	if(owner.life_tick % 5 == 0)//update pulse every 5 life ticks (~1 tick/sec, depending on server load)
-		pulse = PULSE_NORM
+	if(H.health > config.health_threshold_crit)
+		H.adjustOxyLoss(2 * H.breath_fail_ratio)
+	else
+		H.adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS * H.breath_fail_ratio)
 
-		if(round(owner.vessel.get_reagent_amount("blood")) <= BLOOD_VOLUME_BAD)	//how much blood do we have
-			pulse  = PULSE_THREADY	//not enough :(
+	if(H.breath_fail_ratio > 0.175)
+		H.oxygen_alert = max(H.oxygen_alert, 1)
+	else
+		H.oxygen_alert = 0
 
-		else if(owner.status_flags & FAKEDEATH || owner.chem_effects[CE_NOPULSE])
-			pulse = PULSE_NONE		//pretend that we're dead. unlike actual death, can be inflienced by meds
-			pulse = Clamp(pulse + owner.chem_effects[CE_PULSE], PULSE_NONE, PULSE_2FAST)
-		else
-			pulse = Clamp(pulse + owner.chem_effects[CE_PULSE], PULSE_SLOW, PULSE_2FAST)
+/obj/item/organ/internal/heart/nabber
+	open = 1
 
 /obj/item/organ/internal/brain/nabber
 	var lowblood_tally = 0

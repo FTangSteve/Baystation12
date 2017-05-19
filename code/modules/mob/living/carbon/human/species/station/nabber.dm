@@ -51,7 +51,7 @@
 	has_organ = list(    // which required-organ checks are conducted.
 		BP_BRAIN =    /obj/item/organ/internal/brain/nabber,
 		BP_EYES =     /obj/item/organ/internal/eyes/nabber,
-		BP_TRACH =    /obj/item/organ/internal/respirator/tracheae,
+		BP_TRACH =    /obj/item/organ/internal/lungs/nabber,
 		BP_HEART =    /obj/item/organ/internal/heart/nabber,
 		BP_LIVER =    /obj/item/organ/internal/liver/nabber,
 		BP_PHORON =   /obj/item/organ/internal/phoron,
@@ -82,29 +82,6 @@
 
 /datum/species/nabber/get_blood_name()
 	return "haemolymph"
-
-/datum/species/nabber/handle_environment_special(var/mob/living/carbon/human/H)
-	var/obj/item/organ/internal/respirator/tracheae/T = H.internal_organs_by_name[BP_TRACH]
-	var/datum/gas_mixture/breath = H.get_breath_from_environment()
-
-	if(!T && H.should_have_organ(BP_TRACH))
-		H.failed_last_breath = 1
-	else
-		H.failed_last_breath = T.handle_breath(breath) //if breath is null or vacuum, the lungs will handle it for us
-
-	if(H.failed_last_breath)
-		if(H.health > config.health_threshold_crit)
-			H.adjustOxyLoss(2 * H.breath_fail_ratio)
-		else
-			H.adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS * H.breath_fail_ratio)
-
-		if(H.breath_fail_ratio > 0.175)
-			H.oxygen_alert = max(H.oxygen_alert, 1)
-		else
-			H.oxygen_alert = 0
-
-	else
-		H.oxygen_alert = 0
 
 // Nabbers are all about grabbing people for fighting, so they get cool
 // grabbing stuff and need their own object for it.

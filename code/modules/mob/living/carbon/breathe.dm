@@ -9,8 +9,6 @@
 
 /mob/living/carbon/proc/breathe()
 	//if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell)) return
-	if(!should_have_organ(BP_LUNGS)) return
-
 	var/datum/gas_mixture/breath = null
 
 	//First, check if we can breathe at all
