@@ -1,7 +1,12 @@
 /datum/species/nabber
 	name = SPECIES_NABBER
-	name_plural = "Nab-PlaceHolders"
-	blurb = "A race of large insectoid creatures."
+	name_plural = "Giant Armoured Serpentids"
+	blurb = "A species of large invertebrates who, after being discovered by a \
+	research company, were taught how to live and work with humans. Standing \
+	between eight and nine feet tall, these people have a tendency to terrify \
+	those who have not met them before and even so are rarely trusted by the \
+	average person. Even so, they do their jobs well and are thriving in this \
+	new environment."
 
 	language = LANGUAGE_NABBER
 	default_language = LANGUAGE_NABBER
@@ -22,7 +27,7 @@
 
 	icon_template = 'icons/mob/human_races/r_nabber_template.dmi'
 	icobase = 'icons/mob/human_races/r_nabber.dmi'
-//	deform = 'icons/mob/human_races/r_nabber.dmi'
+	deform = 'icons/mob/human_races/r_nabber.dmi'
 
 	darksight = 8
 	slowdown = -0.5
@@ -37,9 +42,9 @@
 	blood_volume = 840
 	spawns_with_stack = 0
 
-	flags = NO_SLIP |CAN_NAB | NO_BLOCK
+	flags = NO_SLIP | CAN_NAB | NO_BLOCK
 	appearance_flags = 0
-	spawn_flags = SPECIES_CAN_JOIN | SPECIES_IS_WHITELISTED | SPECIES_NO_FBP_CONSTRUCTION | SPECIES_NO_FBP_CHARGEN
+	spawn_flags = SPECIES_IS_RESTRICTED | SPECIES_NO_FBP_CONSTRUCTION | SPECIES_NO_FBP_CHARGEN
 
 	breathing_organ = BP_TRACH
 

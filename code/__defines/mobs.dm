@@ -240,4 +240,4 @@
 #define SPECIES_IPC "Machine"
 #define SPECIES_UNATHI "Unathi"
 #define SPECIES_SKRELL "Skrell"
-#define SPECIES_NABBER "Nabber"
+#define SPECIES_NABBER "Giant Armoured Serpentid"
