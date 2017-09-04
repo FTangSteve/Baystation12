@@ -73,6 +73,9 @@
 
 	var/mob/living/L = target
 
+	if(damage_type == BURN && prob(40))
+		L.IgniteMob()
+
 	L.apply_effects(stun, weaken, paralyze, 0, stutter, eyeblur, drowsy, agony, blocked)
 	//radiation protection is handled separately from other armour types.
 	L.apply_effect(irradiate, IRRADIATE, L.getarmor(null, "rad"))

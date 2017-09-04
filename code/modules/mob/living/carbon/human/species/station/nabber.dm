@@ -133,6 +133,10 @@
 
 	return FALSE
 
+/datum/species/nabber/handle_environment_special(var/mob/living/carbon/human/H)
+	if(!H.on_fire && H.fire_stacks < 5)
+		H.fire_stacks += 0.2
+	return
 
 // Nabbers will only fall when there isn't enough air pressure for them to keep themselves aloft.
 /datum/species/nabber/can_fall(var/mob/living/carbon/human/H)

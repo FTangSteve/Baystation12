@@ -116,7 +116,9 @@
 			createwound( BRUISE, brute )
 	if(burn)
 		if(laser)
-			createwound( LASER, burn )
+			createwound(LASER, burn)
+			if(prob(40))
+				owner.IgniteMob()
 		else
 			createwound( BURN, burn )
 	//If there are still hurties to dispense

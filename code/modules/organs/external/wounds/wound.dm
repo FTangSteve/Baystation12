@@ -163,9 +163,6 @@
 	if (src.damage_type != damage_type)
 		return 0	//incompatible damage types
 
-	if (src.amount > 1)
-		return 0	//merged wounds cannot be worsened.
-
 	//with 1.5*, a shallow cut will be able to carry at most 30 damage,
 	//37.5 for a deep cut
 	//52.5 for a flesh wound, etc.

@@ -425,7 +425,7 @@ This function completely restores a damaged organ to perfect condition.
 
 	// first check whether we can widen an existing wound
 	if(!surgical && wounds && wounds.len > 0 && prob(max(50+(number_wounds-1)*10,90)))
-		if((type == CUT || type == BRUISE) && damage >= 5)
+		if((type == CUT || type == BRUISE || type == BURN) && damage >= 5)
 			//we need to make sure that the wound we are going to worsen is compatible with the type of damage...
 			var/list/compatible_wounds = list()
 			for (var/datum/wound/W in wounds)
@@ -440,6 +440,10 @@ This function completely restores a damaged organ to perfect condition.
 						owner.visible_message("<span class='danger'>The damage to [owner.name]'s [name] worsens.</span>",\
 						"<span class='danger'>The damage to your [name] worsens.</span>",\
 						"<span class='danger'>You hear the screech of abused metal.</span>")
+					else if(type == BURN)
+						owner.visible_message("<span class='danger'>The burn on [owner.name]'s [name] worsens with a sickening sizzle.</span>",\
+						"<span class='danger'>The burn on your [name] worsens with a sickening sizzle.</span>",\
+						"<span class='danger'>You hear a sickening sizzle, like meat on a grill.</span>")
 					else
 						owner.visible_message("<span class='danger'>The wound on [owner.name]'s [name] widens with a nasty ripping noise.</span>",\
 						"<span class='danger'>The wound on your [name] widens with a nasty ripping noise.</span>",\
@@ -624,8 +628,22 @@ Note that amputating the affected organ does in fact remove the infection from t
 		// wounds can disappear after 10 minutes at the earliest
 		if(W.damage <= 0 && W.created + (10 MINUTES) <= world.time)
 			wounds -= W
+			qdel(W)
 			continue
-			// let the GC handle the deletion of the wound
+
+		var/widen_dam = W.damage
+		var/wound_check = get_wound_type(W.damage_type, widen_dam)
+		if(W.amount > 4 && !istype(W, wound_check))
+			var/datum/wound/X = new wound_check(widen_dam)
+			if(X.stages[X.stages[2]] <= (widen_dam))
+				wounds -= W
+				qdel(W)
+				for(var/datum/wound/other in wounds)
+					if(other.can_merge(X))
+						other.merge_wound(X)
+						continue
+				wounds += X
+				continue
 
 		// slow healing
 		var/heal_amt = 0
