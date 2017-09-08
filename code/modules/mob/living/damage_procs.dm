@@ -13,7 +13,7 @@
 	switch(damagetype)
 		if(BRUTE)
 			adjustBruteLoss(damage * blocked_mult(blocked))
-		if(BURN)
+		if(BURN || ELECTROCUTE)
 			if(COLD_RESISTANCE in mutations)	damage = 0
 			adjustFireLoss(damage * blocked_mult(blocked))
 		if(TOX)
@@ -24,8 +24,6 @@
 			adjustCloneLoss(damage * blocked_mult(blocked))
 		if(PAIN)
 			adjustHalLoss(damage * blocked_mult(blocked))
-		if(ELECTROCUTE)
-			electrocute_act(damage, used_weapon, 1.0, def_zone)
 	flash_weak_pain()
 	updatehealth()
 	return 1

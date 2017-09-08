@@ -344,11 +344,48 @@
 	if (!def_zone)
 		def_zone = pick(BP_L_HAND, BP_R_HAND)
 
-	var/obj/item/organ/external/affected_organ = get_organ(check_zone(def_zone))
-	var/siemens_coeff = base_siemens_coeff * get_siemens_coefficient_organ(affected_organ)
+	return ..(shock_damage, source, base_siemens_coeff, def_zone)
 
-	return ..(shock_damage, source, siemens_coeff, def_zone)
+/mob/living/carbon/human/apply_shock(var/shock_damage, var/def_zone, var/base_siemens_coeff = 1.0)
+	var/obj/item/organ/external/initial_organ = get_organ(check_zone(def_zone))
+	var/obj/item/organ/external/floor_organ
 
+	if(!lying)
+		var/obj/item/organ/external/list/standing = list()
+		for(var/limb_tag in list(BP_L_FOOT, BP_R_FOOT))
+			var/obj/item/organ/external/E = organs_by_name[limb_tag]
+			if(E.is_usable())
+				standing += E
+		floor_organ = pick(standing)
+
+	if(!floor_organ)
+		floor_organ = pick(organs)
+
+	var/obj/item/organ/external/list/to_shock = list()
+
+	to_shock |= trace_shock(initial_organ)
+	to_shock |= trace_shock(floor_organ)
+
+	if(to_shock)
+		shock_damage /= to_shock.len
+		shock_damage = round(shock_damage)
+	else
+		return 0
+
+	var/total_damage = 0
+
+	for(var/obj/item/organ/external/E in to_shock)
+		total_damage += ..(shock_damage, E.organ_tag, base_siemens_coeff * get_siemens_coefficient_organ(E))
+	return total_damage
+
+/mob/living/carbon/human/proc/trace_shock(var/obj/item/organ/external/E)
+	var/obj/item/organ/external/list/traced_organs = list(E)
+
+	while(E.parent_organ)
+		E = organs_by_name[E.parent_organ]
+		traced_organs += E
+
+	return traced_organs
 
 /mob/living/carbon/human/Topic(href, href_list)
 
