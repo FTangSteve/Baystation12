@@ -182,7 +182,7 @@
 	if(affected.robotic < ORGAN_ROBOT)
 		return affected.open() >= SURGERY_RETRACTED
 	else
-		return affected.hatch == 3
+		return affected.hatch_state == HATCH_OPENED
 
 /datum/surgery_step/cavity/implant_removal/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/obj/item/organ/external/affected = target.get_organ(target_zone)
@@ -196,9 +196,9 @@
 	var/exposed = 0
 	if(affected.open() >= (affected.encased ? SURGERY_ENCASED : SURGERY_RETRACTED))
 		exposed = 1
-	if(affected.robotic >= ORGAN_ROBOT && affected.hatch == 3)
+	if(affected.robotic >= ORGAN_ROBOT && affected.hatch_state == HATCH_OPENED)
 		exposed = 1
-	
+
 	var/find_prob = 0
 	var/list/loot = list()
 	if(exposed)
