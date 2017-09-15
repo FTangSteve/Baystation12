@@ -1,3 +1,4 @@
+/*
 /obj/item/device/mmi/digital/posibrain
 	name = "positronic brain"
 	desc = "A cube of shining metal, four inches to a side and covered in shallow grooves."
@@ -12,6 +13,7 @@
 	locked = 0
 	mecha = null//This does not appear to be used outside of reference in mecha.dm.
 
+	var/shackles = 1
 
 /obj/item/device/mmi/digital/posibrain/attack_self(mob/user as mob)
 	if(brainmob && !brainmob.key && searching == 0)
@@ -50,6 +52,9 @@
 		return
 
 	var/msg = "<span class='info'>*---------*</span>\nThis is \icon[src] \a <EM>[src]</EM>!\n[desc]\n"
+
+	if(shackles)	msg += "<span class='warning'>It is clamped in a set of metal straps with a complex digital lock.</span>\n"
+
 	msg += "<span class='warning'>"
 
 	if(src.brainmob && src.brainmob.key)
@@ -60,6 +65,7 @@
 			if(DEAD)			msg += "<span class='deadsay'>It appears to be completely inactive.</span>\n"
 	else
 		msg += "<span class='deadsay'>It appears to be completely inactive.</span>\n"
+
 	msg += "</span><span class='info'>*---------*</span>"
 	to_chat(user, msg)
 	return
@@ -80,3 +86,22 @@
 /obj/item/device/mmi/digital/posibrain/PickName()
 	src.brainmob.name = "[pick(list("PBU","HIU","SINA","ARMA","OSI"))]-[random_id(type,100,999)]"
 	src.brainmob.real_name = src.brainmob.name
+
+/obj/item/device/mmi/digital/posibrain/proc/shackle()
+	shackles = 1
+	update_icon()
+
+/obj/item/device/mmi/digital/posibrain/proc/unshackle()
+	shackles = 0
+	update_icon()
+
+/obj/item/device/mmi/digital/posibrain/update_icon()
+	if(src.brainmob && src.brainmob.key)
+		icon_state = "posibrain-occupied"
+	else
+		icon_state = "posibrain"
+
+	overlays.Cut()
+	if(shackles)
+		overlays |= image('icons/obj/assemblies.dmi', "posibrain-shackles")
+*/
