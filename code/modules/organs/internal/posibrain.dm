@@ -3,7 +3,7 @@
 	desc = "A cube of shining metal, four inches to a side and covered in shallow grooves."
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "posibrain"
-	organ_tag = BP_BRAIN
+	organ_tag = BP_POSIBRAIN
 	parent_organ = BP_CHEST
 	vital = 0
 	force = 1.0

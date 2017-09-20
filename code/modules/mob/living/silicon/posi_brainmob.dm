@@ -144,7 +144,7 @@
 
 /mob/living/silicon/sil_brainmob/statelaws(var/datum/ai_laws/laws)
 	update_law_channels()
-	if(!(law_channels[lawchannel] != null)
+	if(!(law_channels[lawchannel] != null))
 		to_chat(src, "<span class='danger'>[lawchannel]: Unable to state laws. Communication method unavailable.</span>")
 		return 0
 
