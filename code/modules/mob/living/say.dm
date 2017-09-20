@@ -161,8 +161,10 @@ proc/get_radio_key_from_channel(var/channel)
 	message = trim_left(message)
 
 	//parse the language code and consume it
+	message_admins("speaking [speaking] before check")
 	if(!speaking)
 		speaking = parse_language(message)
+		message_admins("speaking [speaking] after parse")
 		if(speaking)
 			message = copytext(message,2+length(speaking.key))
 		else

@@ -226,6 +226,7 @@
 	H.mob_size = mob_size
 	for(var/obj/item/organ/organ in H.contents)
 		if((organ in H.organs) || (organ in H.internal_organs))
+			message_admins("organ [organ] is being deleted?")
 			qdel(organ)
 
 	if(H.organs)                  H.organs.Cut()

@@ -46,7 +46,7 @@
 	virus_immune = 1
 
 	has_organ = list(
-		BP_BRAIN = /obj/item/organ/internal/mmi_holder/posibrain,
+		BP_BRAIN = /obj/item/organ/internal/posibrain,
 		BP_OPTICS = /obj/item/organ/internal/eyes/optics
 		)
 
@@ -85,6 +85,7 @@
 /datum/species/machine/handle_post_spawn(var/mob/living/carbon/human/H)
 	if(!H)
 		return
+	message_admins("handle limbs")
 	handle_limbs_setup(H)
 
 /datum/species/machine/handle_limbs_setup(var/mob/living/carbon/human/H)

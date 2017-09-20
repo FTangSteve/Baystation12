@@ -89,11 +89,14 @@
 
 	for(var/datum/ai_law/law in laws.laws_to_state())
 		can_state = statelaw("[prefix][law.get_index()]. [law.law]")
+		message_admins("canstate was [can_state]")
 		if(!can_state)
+			message_admins("had to break")
 			break
 
 	if(!can_state)
 		to_chat(src, "<span class='danger'>[method]: Unable to state laws. Communication method unavailable.</span>")
+		message_admins("<span class='danger'>[method]: Unable to state laws (admin). Communication method unavailable.</span>")
 	stating_laws[prefix] = 0
 
 /mob/living/silicon/proc/statelaw(var/law)
@@ -106,7 +109,7 @@
 /mob/living/silicon/proc/law_channels()
 	var/list/channels = new()
 	channels += MAIN_CHANNEL
-	channels += common_radio.channels
+	if(common_radio)	channels += common_radio.channels
 	channels += additional_law_channels
 	channels += "Binary"
 	return channels
