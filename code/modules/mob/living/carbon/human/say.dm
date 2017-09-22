@@ -7,7 +7,7 @@
 			name = get_id_name("Unknown")
 
 	message = sanitize(message)
-	..(message, alt_name = alt_name, speaking = language)
+	. = ..(message, alt_name = alt_name, speaking = language)
 
 /mob/living/carbon/human/proc/forcesay(list/append)
 	if(stat == CONSCIOUS)

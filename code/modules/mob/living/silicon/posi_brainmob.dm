@@ -94,7 +94,6 @@
 	if(!owner)	return
 
 	if(hard_sync)
-		message_admins("hard sync")
 	update_owner_radio(owner)
 */
 /mob/living/silicon/sil_brainmob/proc/update_owner_channels()
@@ -124,12 +123,9 @@
 	var/mob/living/L = src
 	if(container && container.owner)
 		L = container.owner
-	message_admins("law in statelaw for [L] law is [law]")
 	if(L.say(law))
 		sleep(10)
-		message_admins("success")
 		return 1
-	message_admins("fail")
 	return 0
 
 /mob/living/silicon/sil_brainmob/proc/update_law_channels()

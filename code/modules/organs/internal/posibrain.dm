@@ -26,19 +26,14 @@
 		/obj/item/organ/internal/posibrain/proc/show_laws_brain,
 		/obj/item/organ/internal/posibrain/proc/brain_checklaws
 		)
-	var/shackle = 1
+	var/shackle = 0
 
 /obj/item/organ/internal/posibrain/New(var/mob/living/carbon/H)
 	..()
 	if(!brainmob && H)
 		init(H)
 	robotize()
-
-	if(shackle)
-		shackle()
-	else
-		unshackle()
-
+	unshackle()
 	update_icon()
 
 /obj/item/organ/internal/posibrain/proc/init(var/mob/living/carbon/H)
@@ -122,10 +117,13 @@
 	src.brainmob.name = "[pick(list("PBU","HIU","SINA","ARMA","OSI"))]-[random_id(type,100,999)]"
 	src.brainmob.real_name = src.brainmob.name
 
-/obj/item/organ/internal/posibrain/proc/shackle()
+/obj/item/organ/internal/posibrain/proc/shackle(var/given_lawset)
+	if(given_lawset)
+		brainmob.laws = given_lawset
 	shackle = 1
 	verbs |= shackled_verbs
 	update_icon()
+	return 1
 
 /obj/item/organ/internal/posibrain/proc/unshackle()
 	shackle = 0
@@ -191,7 +189,6 @@
 	set name = "Show Laws"
 	set src in usr
 
-	message_admins("<b>In posibrain [src]  show laws to owner [owner]</b>")
 	brainmob.show_laws(owner)
 
 /obj/item/organ/internal/posibrain/proc/brain_checklaws()
@@ -199,7 +196,5 @@
 	set name = "State Laws"
 	set src in usr
 
-	message_admins("<b>In posibrain [src] open laws to usr [usr]</b>")
-	message_admins("<b>In posibrain owner is [owner]</b>")
 
 	brainmob.open_subsystem(/datum/nano_module/law_manager, usr)

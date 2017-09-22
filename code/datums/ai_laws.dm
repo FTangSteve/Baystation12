@@ -233,7 +233,6 @@
 /datum/ai_laws/proc/format_laws()
 	sort_laws()
 	for(var/datum/ai_law/law in sorted_laws)
-		message_admins("oh god [law.law]")
 /********************
 *	Stating Laws	*
 ********************/
