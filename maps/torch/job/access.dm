@@ -135,6 +135,11 @@
 	desc = "Pathfinder"
 	region = ACCESS_REGION_RESEARCH
 
+/var/const/access_bogani = 202
+/datum/access/bogani
+	id = access_bogani
+	desc = SPECIES_BOGANI
+	region = ACCESS_REGION_NONE
 
 /************
 * SEV Torch *
