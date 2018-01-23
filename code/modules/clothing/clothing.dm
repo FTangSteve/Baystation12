@@ -94,6 +94,7 @@
 				return 0
 	return 1
 
+
 /obj/item/clothing/equipped(var/mob/user)
 	if(needs_vision_update())
 		update_vision()
@@ -109,6 +110,10 @@
 			species_restricted = list(SPECIES_HUMAN, SPECIES_SKRELL, SPECIES_IPC) //skrell/humans/machines can wear each other's suits
 		else
 			species_restricted = list(target_species)
+
+	var/sheet_loc = initial(icon)
+	var/find_mob_spot = findtextEx(sheet_loc, "/mob")
+	DBG("sheet is [sheet_loc] and find is [find_mob_spot]")
 
 	if (sprite_sheets_obj && (target_species in sprite_sheets_obj))
 		icon = sprite_sheets_obj[target_species]
@@ -261,8 +266,7 @@ BLIND     // can't see anything
 	species_restricted = list("exclude",SPECIES_NABBER, SPECIES_UNATHI,SPECIES_TAJARA, SPECIES_VOX)
 	sprite_sheets = list(
 		SPECIES_VOX = 'icons/mob/species/vox/gloves.dmi',
-		SPECIES_NABBER = 'icons/mob/species/nabber/gloves.dmi',
-		SPECIES_UNATHI = 'icons/mob/species/unathi/hands.dmi'
+		SPECIES_NABBER = 'icons/mob/species/nabber/gloves.dmi'
 		)
 	blood_overlay_type = "bloodyhands"
 
@@ -360,8 +364,8 @@ BLIND     // can't see anything
 	name = "head"
 	icon = 'icons/obj/clothing/hats.dmi'
 	item_icons = list(
-		slot_l_hand_str = 'icons/mob/items/lefthand_hats.dmi',
-		slot_r_hand_str = 'icons/mob/items/righthand_hats.dmi',
+		slot_l_hand_str = 'icons/mob/onmob/items/lefthand_hats.dmi',
+		slot_r_hand_str = 'icons/mob/onmob/items/righthand_hats.dmi',
 		)
 	body_parts_covered = HEAD
 	slot_flags = SLOT_HEAD
@@ -373,8 +377,7 @@ BLIND     // can't see anything
 	var/on = 0
 
 	sprite_sheets = list(
-		SPECIES_VOX = 'icons/mob/species/vox/head.dmi',
-		SPECIES_UNATHI = 'icons/mob/species/unathi/head.dmi'
+		SPECIES_VOX = 'icons/mob/species/vox/head.dmi'
 		)
 	blood_overlay_type = "helmetblood"
 
@@ -566,7 +569,6 @@ BLIND     // can't see anything
 	species_restricted = list("exclude", SPECIES_NABBER, SPECIES_UNATHI, SPECIES_TAJARA, SPECIES_VOX)
 	sprite_sheets = list(
 		SPECIES_VOX = 'icons/mob/species/vox/shoes.dmi',
-		SPECIES_UNATHI = 'icons/mob/species/unathi/feet.dmi'
 		)
 	blood_overlay_type = "shoeblood"
 
@@ -643,8 +645,7 @@ BLIND     // can't see anything
 	w_class = ITEM_SIZE_NORMAL
 
 	sprite_sheets = list(
-		SPECIES_VOX = 'icons/mob/species/vox/suit.dmi',
-		SPECIES_UNATHI = 'icons/mob/species/unathi/suit.dmi'
+		SPECIES_VOX = 'icons/mob/species/vox/suit.dmi'
 		)
 
 /obj/item/clothing/suit/update_clothing_icon()
@@ -671,8 +672,8 @@ BLIND     // can't see anything
 /obj/item/clothing/under
 	icon = 'icons/obj/clothing/uniforms.dmi'
 	item_icons = list(
-		slot_l_hand_str = 'icons/mob/items/lefthand_uniforms.dmi',
-		slot_r_hand_str = 'icons/mob/items/righthand_uniforms.dmi',
+		slot_l_hand_str = 'icons/mob/onmob/items/lefthand_uniforms.dmi',
+		slot_r_hand_str = 'icons/mob/onmob/items/righthand_uniforms.dmi',
 		)
 	name = "under"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
@@ -693,8 +694,7 @@ BLIND     // can't see anything
 	var/rolled_sleeves = -1 //0 = unrolled, 1 = rolled, -1 = cannot be toggled
 	sprite_sheets = list(
 		SPECIES_VOX = 'icons/mob/species/vox/uniform.dmi',
-		SPECIES_NABBER = 'icons/mob/species/nabber/uniform.dmi',
-		SPECIES_UNATHI = 'icons/mob/species/unathi/uniform.dmi'
+		SPECIES_NABBER = 'icons/mob/species/nabber/uniform.dmi'
 		)
 
 	//convenience var for defining the icon state for the overlay used when the clothing is worn.

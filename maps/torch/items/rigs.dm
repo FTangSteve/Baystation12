@@ -23,23 +23,23 @@
 /obj/item/clothing/head/helmet/space/rig/command
 	light_overlay = "helmet_light_dual"
 	icon = 'maps/torch/icons/obj/solgov-head.dmi'
-	item_icons = list(slot_head_str = 'maps/torch/icons/mob/solgov-head.dmi')
+	item_icons = list(slot_head_str = 'maps/torch/icons/mob/onmob/solgov-head.dmi')
 	camera = /obj/machinery/camera/network/security
 	species_restricted = list(SPECIES_HUMAN) //no available icons for aliens
 
 /obj/item/clothing/suit/space/rig/command
 	icon = 'maps/torch/icons/obj/solgov-suit.dmi'
-	item_icons = list(slot_wear_suit_str = 'maps/torch/icons/mob/solgov-suit.dmi')
+	item_icons = list(slot_wear_suit_str = 'maps/torch/icons/mob/onmob/solgov-suit.dmi')
 	species_restricted = list(SPECIES_HUMAN)
 
 /obj/item/clothing/shoes/magboots/rig/command
 	icon = 'maps/torch/icons/obj/solgov-feet.dmi'
-	item_icons = list(slot_shoes_str = 'maps/torch/icons/mob/solgov-feet.dmi')
+	item_icons = list(slot_shoes_str = 'maps/torch/icons/mob/onmob/solgov-feet.dmi')
 	species_restricted = list(SPECIES_HUMAN)
 
 /obj/item/clothing/gloves/rig/command
 	icon = 'maps/torch/icons/obj/solgov-hands.dmi'
-	item_icons = list(slot_gloves_str = 'maps/torch/icons/mob/solgov-hands.dmi')
+	item_icons = list(slot_gloves_str = 'maps/torch/icons/mob/onmob/solgov-hands.dmi')
 	species_restricted = list(SPECIES_HUMAN)
 
 

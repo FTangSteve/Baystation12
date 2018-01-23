@@ -62,7 +62,7 @@
 	// If icon_override or sprite_sheets are set they will take precendence over this, assuming they apply to the slot in question.
 	// Only slot_l_hand/slot_r_hand are implemented at the moment. Others to be implemented as needed.
 	var/list/item_icons
-
+	var/item_icon_root = "icons/mob/onmob/"
 	//** These specify item/icon overrides for _species_
 
 	/* Species-specific sprites, concept stolen from Paradise//vg/.
@@ -83,6 +83,8 @@
 	if(randpixel && (!pixel_x && !pixel_y) && isturf(loc)) //hopefully this will prevent us from messing with mapper-set pixel_x/y
 		pixel_x = rand(-randpixel, randpixel)
 		pixel_y = rand(-randpixel, randpixel)
+
+
 
 /obj/item/Destroy()
 	qdel(hidden_uplink)
@@ -682,6 +684,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	return given_icon
 
 /obj/item/proc/get_mob_overlay(mob/user_mob, slot)
+
 	var/bodytype = "Default"
 	var/mob/living/carbon/human/user_human
 	if(ishuman(user_mob))
@@ -692,6 +695,10 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 
 	var/mob_icon
 	var/spritesheet = FALSE
+	var/sheet_loc = item_icons[slot]
+	var/find_mob_spot = findtextEx(sheet_loc, "/mob")
+	DBG("sheet is [sheet_loc] and find is [find_mob_spot]")
+
 	if(icon_override)
 		mob_icon = icon_override
 		if(slot == 	slot_l_hand_str || slot == slot_l_ear_str)

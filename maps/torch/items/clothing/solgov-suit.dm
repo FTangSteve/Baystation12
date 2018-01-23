@@ -1,7 +1,8 @@
 /obj/item/clothing/suit/storage/solgov/
 	name = "master solgov jacket"
 	icon = 'maps/torch/icons/obj/solgov-suit.dmi'
-	item_icons = list(slot_wear_suit_str = 'maps/torch/icons/mob/solgov-suit.dmi')
+	item_base_path
+	item_icons = list(slot_wear_suit_str = 'maps/torch/icons/mob/onmob/solgov-suit.dmi')
 
 //Service
 
@@ -182,7 +183,7 @@
 	icon_state = "greydress"
 	item_state = "greydress"
 	icon = 'maps/torch/icons/obj/solgov-suit.dmi'
-	item_icons = list(slot_wear_suit_str = 'maps/torch/icons/mob/solgov-suit.dmi')
+	item_icons = list(slot_wear_suit_str = 'maps/torch/icons/mob/onmob/solgov-suit.dmi')
 	body_parts_covered = UPPER_TORSO|ARMS
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.9
@@ -209,7 +210,7 @@
 	icon_open = "whitedress_open"
 	icon_closed = "whitedress"
 	icon = 'maps/torch/icons/obj/solgov-suit.dmi'
-	item_icons = list(slot_wear_suit_str = 'maps/torch/icons/mob/solgov-suit.dmi')
+	item_icons = list(slot_wear_suit_str = 'maps/torch/icons/mob/onmob/solgov-suit.dmi')
 	blood_overlay_type = "coat"
 	valid_accessory_slots = list(ACCESSORY_SLOT_MEDAL,ACCESSORY_SLOT_RANK)
 
@@ -244,7 +245,7 @@
 	name = "expeditionary winter coat"
 	icon_state = "coatec"
 	icon = 'maps/torch/icons/obj/solgov-suit.dmi'
-	item_icons = list(slot_wear_suit_str = 'maps/torch/icons/mob/solgov-suit.dmi')
+	item_icons = list(slot_wear_suit_str = 'maps/torch/icons/mob/onmob/solgov-suit.dmi')
 	armor = list(melee = 25, bullet = 10, laser = 5, energy = 10, bomb = 20, bio = 0, rad = 10)
 	valid_accessory_slots = list(ACCESSORY_SLOT_INSIGNIA,ACCESSORY_SLOT_RANK)
 

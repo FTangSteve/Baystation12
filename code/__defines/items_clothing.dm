@@ -207,24 +207,26 @@
 	7 - things that are large enough to contain humans, like closets, but smaller than entire turfs
 	8 - things that take up an entire turf, like wall girders or door assemblies
 */
+#define DBG(msg) message_admins(msg)
+
 
 var/list/default_onmob_icons = list(
-		slot_l_hand_str = 'icons/mob/items/lefthand.dmi',
-		slot_r_hand_str = 'icons/mob/items/righthand.dmi',
-		slot_belt_str = 'icons/mob/belt.dmi',
-		slot_back_str = 'icons/mob/back.dmi',
-		slot_l_ear_str = 'icons/mob/ears.dmi',
-		slot_r_ear_str = 'icons/mob/ears.dmi',
-		slot_glasses_str = 'icons/mob/eyes.dmi',
-		slot_wear_id_str = 'icons/mob/mob.dmi',
-		slot_w_uniform_str = 'icons/mob/uniform.dmi',
-		slot_wear_suit_str = 'icons/mob/suit.dmi',
-		slot_head_str = 'icons/mob/head.dmi',
-		slot_shoes_str = 'icons/mob/feet.dmi',
-		slot_wear_mask_str = 'icons/mob/mask.dmi',
-		slot_handcuffed_str = 'icons/mob/mob.dmi',
-		slot_legcuffed_str = 'icons/mob/mob.dmi',
-		slot_gloves_str = 'icons/mob/hands.dmi',
-		slot_s_store_str = 'icons/mob/belt_mirror.dmi',
-		slot_tie_str = 'icons/mob/ties.dmi'
+		slot_l_hand_str = "items/lefthand.dmi",
+		slot_r_hand_str = "items/righthand.dmi",
+		slot_belt_str = "belt.dmi",
+		slot_back_str = "back.dmi",
+		slot_l_ear_str = "ears.dmi",
+		slot_r_ear_str = "ears.dmi",
+		slot_glasses_str = "eyes.dmi",
+		slot_wear_id_str = "id.dmi",
+		slot_w_uniform_str = "uniform.dmi",
+		slot_wear_suit_str = "suit.dmi",
+		slot_head_str = "head.dmi",
+		slot_shoes_str = "feet.dmi",
+		slot_wear_mask_str = "mask.dmi",
+		slot_handcuffed_str = "misc.dmi",
+		slot_legcuffed_str = "misc.dmi",
+		slot_gloves_str = "hands.dmi",
+		slot_s_store_str = "belt_mirror.dmi",
+		slot_tie_str = "ties.dmi"
 		)

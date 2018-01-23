@@ -1,7 +1,7 @@
 /obj/item/clothing/head/solgov
 	name = "master solgov hat"
 	icon = 'maps/torch/icons/obj/solgov-head.dmi'
-	item_icons = list(slot_head_str = 'maps/torch/icons/mob/solgov-head.dmi')
+	item_icons = list(slot_head_str = 'maps/torch/icons/mob/onmob/solgov-head.dmi')
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.9
 
@@ -11,7 +11,7 @@
 	desc = "It's a ballcap in SCG colors."
 	icon_state = "solsoft"
 	icon = 'maps/torch/icons/obj/solgov-head.dmi'
-	item_icons = list(slot_head_str = 'maps/torch/icons/mob/solgov-head.dmi')
+	item_icons = list(slot_head_str = 'maps/torch/icons/mob/onmob/solgov-head.dmi')
 
 /obj/item/clothing/head/soft/solgov/veteranhat
 	name = "veteran hat"
@@ -147,7 +147,7 @@
 	desc = "A beret in Sol Central Government colors. For peacekeepers that are more inclined towards style than safety."
 	icon_state = "beret_lightblue"
 	icon = 'maps/torch/icons/obj/solgov-head.dmi'
-	item_icons = list(slot_head_str = 'maps/torch/icons/mob/solgov-head.dmi')
+	item_icons = list(slot_head_str = 'maps/torch/icons/mob/onmob/solgov-head.dmi')
 
 /obj/item/clothing/head/beret/solgov/homeguard
 	name = "home guard beret"
@@ -285,7 +285,7 @@
 	name = "expeditionary fur hat"
 	desc = "An SCG Expeditionary Corps synthfur-lined hat for operating in cold environments."
 	icon = 'maps/torch/icons/obj/solgov-head.dmi'
-	item_icons = list(slot_head_str = 'maps/torch/icons/mob/solgov-head.dmi')
+	item_icons = list(slot_head_str = 'maps/torch/icons/mob/onmob/solgov-head.dmi')
 	icon_state = "ecushankadown"
 	icon_state_up = "ecushankaup"
 
@@ -317,7 +317,7 @@
 	desc = "A helmet with 'POLICE' printed on the back in silver lettering."
 	icon_state = "helmet_security"
 	icon = 'maps/torch/icons/obj/solgov-head.dmi'
-	item_icons = list(slot_head_str = 'maps/torch/icons/mob/solgov-head.dmi')
+	item_icons = list(slot_head_str = 'maps/torch/icons/mob/onmob/solgov-head.dmi')
 	starting_accessories = null
 
 /obj/item/clothing/head/helmet/solgov/command
@@ -325,5 +325,5 @@
 	desc = "A helmet with 'SOL CENTRAL GOVERNMENT' printed on the back in gold lettering."
 	icon_state = "helmet_command"
 	icon = 'maps/torch/icons/obj/solgov-head.dmi'
-	item_icons = list(slot_head_str = 'maps/torch/icons/mob/solgov-head.dmi')
+	item_icons = list(slot_head_str = 'maps/torch/icons/mob/onmob/solgov-head.dmi')
 	starting_accessories = null
