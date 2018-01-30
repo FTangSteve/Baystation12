@@ -31,6 +31,8 @@
 	var/destroyed       // Whether we are destroyed and need to stop emitting light.
 	var/force_update
 
+	var/unique_group    // If this light is in a unique group and the name of the group.
+
 /datum/light_source/New(var/atom/owner, var/atom/top)
 	total_lighting_sources++
 	source_atom = owner // Set our new owner.
@@ -49,6 +51,8 @@
 	light_power = source_atom.light_power
 	light_range = source_atom.light_range
 	light_color = source_atom.light_color
+
+	unique_group = source_atom.light_unique
 
 	parse_light_color()
 
@@ -139,6 +143,10 @@
 	if(light_range && light_power && !applied)
 		. = 1
 
+	if(source_atom.light_unique != unique_group)
+		unique_group = source_atom.light_unique
+		. = 1
+
 	if(source_atom.light_color != light_color)
 		light_color = source_atom.light_color
 		parse_light_color()
@@ -169,7 +177,8 @@
 	(                                \
 		. * applied_lum_r,           \
 		. * applied_lum_g,           \
-		. * applied_lum_b            \
+		. * applied_lum_b,           \
+		unique_group                 \
 	);
 
 // I don't need to explain what this does, do I?
@@ -179,7 +188,8 @@
 	(                                \
 		. * applied_lum_r,           \
 		. * applied_lum_g,           \
-		. * applied_lum_b            \
+		. * applied_lum_b,            \
+		unique_group                 \
 	);
 
 // This is the define used to calculate falloff.
@@ -211,8 +221,6 @@
 
 			APPLY_CORNER(C)
 
-
-
 		if(!T.affecting_lights)
 			T.affecting_lights = list()
 
@@ -224,8 +232,6 @@
 			// Consider the turf below us as well. (Z-lights)
 			//Do subprocessing for open turfs
 			for(T = O.below; !isnull(T); T = process_the_turf(T,update_gen));
-
-
 
 	update_gen++
 

@@ -55,13 +55,24 @@
 /turf/space/is_solid_structure()
 	return locate(/obj/structure/lattice, src) //counts as solid structure if it has a lattice
 
+#define DBG(msg) message_admins(msg) ; world << msg
+
 /turf/space/proc/update_starlight()
 	if(!config.starlight)
 		return
-	if(locate(/turf/simulated) in orange(src,1))
-		set_light(config.starlight)
+
+	var/list/rangelist = list()
+	rangelist |= orange(1,src)
+	var/turf/below = GetBelow(src)
+	if(below)
+		rangelist |= orange(1,below)
+
+	if(locate(/turf/simulated) in rangelist)
+		set_light(2 * config.starlight, 1, SSskybox.BGcolor, UL_STARLIGHT)
 	else
-		set_light(0)
+		light_power = 0
+		light_range = 0
+		update_light()
 
 /turf/space/attackby(obj/item/C as obj, mob/user as mob)
 

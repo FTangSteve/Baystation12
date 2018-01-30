@@ -294,8 +294,9 @@ var/list/mob/living/forced_ambiance_list = new
 
 	if(forced_ambience)
 		if(forced_ambience.len)
-			forced_ambiance_list |= L
-			L.playsound_local(T,sound(pick(forced_ambience), repeat = 1, wait = 0, volume = 25, channel = 1))
+			if(!(L in forced_ambiance_list))
+				forced_ambiance_list |= L
+				L.playsound_local(T,sound(pick(forced_ambience), repeat = 1, wait = 0, volume = 25, channel = 1))
 		else
 			sound_to(L, sound(null, channel = 1))
 	else if(src.ambience.len && prob(35))

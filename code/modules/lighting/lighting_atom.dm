@@ -2,13 +2,14 @@
 	var/light_power = 1 // intensity of the light
 	var/light_range = 0 // range in tiles of the light
 	var/light_color		// Hexadecimal RGB string representing the colour of the light
+	var/light_unique	// A unique tag
 
 	var/datum/light_source/light
 	var/list/light_sources
 
 // Nonsensical value for l_color default, so we can detect if it gets set to null.
 #define NONSENSICAL_VALUE -99999
-/atom/proc/set_light(l_range, l_power, l_color = NONSENSICAL_VALUE)
+/atom/proc/set_light(l_range, l_power, l_color = NONSENSICAL_VALUE, l_unique)
 	. = 0 //make it less costly if nothing's changed
 
 	if(l_power != null && l_power != light_power)
@@ -19,6 +20,9 @@
 		. = 1
 	if(l_color != NONSENSICAL_VALUE && l_color != light_color)
 		light_color = l_color
+		. = 1
+	if(l_unique != null && l_unique != light_unique)
+		light_unique = l_unique
 		. = 1
 
 	if(.) update_light()
@@ -48,7 +52,7 @@
 		light.destroy()
 		light = null
 	return ..()
-	
+
 /atom/set_opacity()
 	. = ..()
 	if(.)

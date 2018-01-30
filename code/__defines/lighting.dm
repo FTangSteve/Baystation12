@@ -51,3 +51,6 @@
 #define CL_MATRIX_CG 18
 #define CL_MATRIX_CB 19
 #define CL_MATRIX_CA 20
+
+// All the unique light groups
+#define UL_STARLIGHT "starlight"

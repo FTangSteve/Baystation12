@@ -10,6 +10,7 @@
 	density = 1
 	anchored = 1.0
 	var/win_path = /obj/structure/window/basic
+	var/grille_path = /obj/structure/grille
 	var/activated = FALSE
 	var/fulltile = FALSE
 
@@ -50,7 +51,7 @@
 	if(locate(/obj/structure/grille) in loc)
 		warning("Window Spawner: A grille already exists at [loc.x]-[loc.y]-[loc.z]")
 	else
-		var/obj/structure/grille/G = new /obj/structure/grille(loc)
+		var/obj/structure/grille/G = new grille_path(loc)
 		handle_grille_spawn(G)
 
 	var/list/neighbours = list()

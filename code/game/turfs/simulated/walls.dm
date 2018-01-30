@@ -22,8 +22,11 @@
 	var/list/wall_connections = list("0", "0", "0", "0")
 	var/floor_type = /turf/simulated/floor/plating //turf it leaves after destruction
 
-/turf/simulated/wall/New(var/newloc, var/materialtype, var/rmaterialtype)
+/turf/simulated/wall/New(var/newloc, var/materialtype, var/rmaterialtype, var/mat_over = FALSE)
 	..(newloc)
+	if(mat_over)
+		processing_turfs |= src
+		return
 	icon_state = "blank"
 	if(!materialtype)
 		materialtype = DEFAULT_WALL_MATERIAL

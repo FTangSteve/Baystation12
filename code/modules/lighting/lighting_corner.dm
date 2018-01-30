@@ -10,6 +10,7 @@
 /datum/lighting_corner
 	var/list/turf/masters                 = list()
 	var/list/datum/light_source/affecting = list() // Light sources affecting us.
+	var/list/datum/light_source/uniques   = list() // Prime member of a unique group
 	var/active                            = FALSE  // TRUE if one of our masters has dynamic lighting.
 
 	var/x     = 0
@@ -87,8 +88,23 @@
 		if (T.lighting_overlay)
 			active = TRUE
 
+#define DBG_SPC(msg) null//if(x == 82.5 && y == 76.5 && z == 3) to_world_log(msg);if(x == 82.5 && y == 76.5 && z == 3) message_admins(msg)
+
 // God that was a mess, now to do the rest of the corner code! Hooray!
-/datum/lighting_corner/proc/update_lumcount(var/delta_r, var/delta_g, var/delta_b)
+/datum/lighting_corner/proc/update_lumcount(var/delta_r, var/delta_g, var/delta_b, var/unique_group)
+	DBG_SPC("light with dr [delta_r] dg [delta_g] db [delta_b] ug [unique_group]")
+	if(unique_group)
+		DBG_SPC("unique group [unique_group]")
+		if(!uniques[unique_group])
+			uniques[unique_group] = list("r" = list(), "g" = list(), "b" = list())
+			DBG_SPC("init")
+		DBG_SPC("doing things")
+		var/list/values = uniques[unique_group]
+
+		delta_r = colour_list_adjust(values["r"], delta_r)
+		delta_g = colour_list_adjust(values["g"], delta_g)
+		delta_b = colour_list_adjust(values["b"], delta_b)
+
 	lum_r += delta_r
 	lum_g += delta_g
 	lum_b += delta_b
@@ -96,6 +112,30 @@
 	if (!needs_update)
 		needs_update = TRUE
 		lighting_update_corners += src
+
+/datum/lighting_corner/proc/colour_list_adjust(var/list/cols, var/list/value)
+	DBG_SPC("in colour_list_adjust with value [value]")
+	if(!value)
+		return 0
+	var/old_max = 0
+	if(cols.len)
+		old_max = cols[cols.len]
+	if(value > 0)
+		if(!cols.len)
+			cols.Add(value)
+			return cols[cols.len] - old_max
+		var/inserted = FALSE
+		for(var/i = 1 to cols.len)
+			if(value <= cols[i])
+				cols.Insert(i, value)
+				inserted = TRUE
+				break
+		if(!inserted)
+			cols.Add(value)
+	else if (value < 0)
+		cols.Remove(abs(value))
+
+	return cols.len ? cols[cols.len] - old_max : 0 - old_max
 
 /datum/lighting_corner/proc/update_overlays()
 	// Cache these values a head of time so 4 individual lighting overlays don't all calculate them individually.
