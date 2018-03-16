@@ -163,7 +163,6 @@
 
 #define APPLY_CORNER(C)              \
 	. = LUM_FALLOFF(C, source_turf); \
-	. *= light_power/2;              \
 	effect_str[C] = .;               \
 	C.update_lumcount                \
 	(                                \
@@ -183,7 +182,16 @@
 	);
 
 // This is the define used to calculate falloff.
-#define LUM_FALLOFF(C, T)(1 - CLAMP01(((C.x - T.x) ** 2 +(C.y - T.y) ** 2 + LIGHTING_HEIGHT) ** 0.6 / max(1, light_range)))
+// Assuming a brightness of 1 at range 1, formula should be (brightness = 1 / distance^2)
+// However, due to the weird range factor (which I don't like), brightness = power *
+
+//#define LUM_FALLOFF(C, T)(-((x - h) / (h - b))) ** p
+
+#define LUM_FALLOFF(C, T)(CLAMP01(-((((C.x - T.x) ** 2 +(C.y - T.y) ** 2) ** 0.5 - light_range) / (light_range - (light_range / 4)))) ** light_power)
+
+// original #define LUM_FALLOFF(C, T)(1 - CLAMP01(((C.x - T.x) ** 2 +(C.y - T.y) ** 2 + LIGHTING_HEIGHT) ** 0.6 / max(1, light_range)))
+
+//CALL set_light(12, 2) ON /obj/machinery/light
 
 /datum/light_source/proc/apply_lum()
 	var/static/update_gen = 1
