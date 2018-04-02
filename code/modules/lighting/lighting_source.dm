@@ -7,8 +7,10 @@
 	var/atom/source_atom     // The atom that we belong to.
 
 	var/turf/source_turf     // The turf under the above.
-	var/light_power    // Intensity of the emitter light.
-	var/light_range      // The range of the emitted light.
+	var/light_max_bright = 1  // intensity of the light within the full brightness range. Value between 0 and 1
+	var/light_inner_range = 0 // range, in tiles, the light is at full brightness
+	var/light_outer_range = 0 // range, in tiles, where the light becomes darkness
+	var/light_falloff_curve   // adjusts curve for falloff gradient
 	var/light_color    // The colour of the light, string, decomposed by parse_light_color()
 
 	// Variables for keeping track of the colour.
@@ -46,8 +48,10 @@
 		top_atom.light_sources += src
 
 	source_turf = top_atom
-	light_power = source_atom.light_power
-	light_range = source_atom.light_range
+	light_max_bright = source_atom.light_max_bright
+	light_inner_range = source_atom.light_inner_range
+	light_outer_range = source_atom.light_outer_range
+	light_falloff_curve = source_atom.light_falloff_curve
 	light_color = source_atom.light_color
 
 	parse_light_color()
@@ -128,15 +132,23 @@
 		source_turf = top_atom.loc
 		. = 1
 
-	if(source_atom.light_power != light_power)
-		light_power = source_atom.light_power
+	if(source_atom.light_max_bright != light_max_bright)
+		light_max_bright = source_atom.light_max_bright
 		. = 1
 
-	if(source_atom.light_range != light_range)
-		light_range = source_atom.light_range
+	if(source_atom.light_inner_range != light_inner_range)
+		light_inner_range = source_atom.light_inner_range
 		. = 1
 
-	if(light_range && light_power && !applied)
+	if(source_atom.light_outer_range != light_outer_range)
+		light_outer_range = source_atom.light_outer_range
+		. = 1
+
+	if(source_atom.light_falloff_curve != light_falloff_curve)
+		light_falloff_curve = source_atom.light_falloff_curve
+		. = 1
+
+	if(light_max_bright && light_outer_range && !applied)
 		. = 1
 
 	if(source_atom.light_color != light_color)
@@ -163,6 +175,7 @@
 
 #define APPLY_CORNER(C)              \
 	. = LUM_FALLOFF(C, source_turf); \
+	. *= light_max_bright;           \
 	effect_str[C] = .;               \
 	C.update_lumcount                \
 	(                                \
@@ -183,15 +196,10 @@
 
 // This is the define used to calculate falloff.
 // Assuming a brightness of 1 at range 1, formula should be (brightness = 1 / distance^2)
-// However, due to the weird range factor (which I don't like), brightness = power *
+// However, due to the weird range factor, brightness = (-(distance - full_dark_start) / (full_dark_start - full_light_end)) ^ light_power
 
-//#define LUM_FALLOFF(C, T)(-((x - h) / (h - b))) ** p
+#define LUM_FALLOFF(C, T)(CLAMP01(-((((C.x - T.x) ** 2 +(C.y - T.y) ** 2) ** 0.5 - light_outer_range) / (light_outer_range - light_inner_range))) ** light_falloff_curve)
 
-#define LUM_FALLOFF(C, T)(CLAMP01(-((((C.x - T.x) ** 2 +(C.y - T.y) ** 2) ** 0.5 - light_range) / (light_range - (light_range / 4)))) ** light_power)
-
-// original #define LUM_FALLOFF(C, T)(1 - CLAMP01(((C.x - T.x) ** 2 +(C.y - T.y) ** 2 + LIGHTING_HEIGHT) ** 0.6 / max(1, light_range)))
-
-//CALL set_light(12, 2) ON /obj/machinery/light
 
 /datum/light_source/proc/apply_lum()
 	var/static/update_gen = 1

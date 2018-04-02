@@ -329,7 +329,7 @@
 			icon_state = "alarm1"
 			new_color = COLOR_RED_LIGHT
 
-	set_light(l_range = 2, l_power = 0.6, l_color = new_color)
+	set_light(l_range = 1, l_power = 2, l_color = new_color)
 
 /obj/machinery/alarm/receive_signal(datum/signal/signal)
 	if(stat & (NOPOWER|BROKEN))
@@ -904,7 +904,7 @@ FIRE ALARM
 	else
 		if(!src.detecting)
 			icon_state = "fire1"
-			set_light(l_range = 4, l_power = 2, l_color = COLOR_RED)
+			set_light(l_range = 1, l_power = 2, l_color = COLOR_RED)
 		else if(z in GLOB.using_map.contact_levels)
 			icon_state = "fire0"
 			var/decl/security_state/security_state = decls_repository.get_decl(GLOB.using_map.security_state)
