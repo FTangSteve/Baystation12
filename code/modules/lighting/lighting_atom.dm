@@ -1,6 +1,6 @@
 /atom
 	var/light_max_bright = 1  // intensity of the light within the full brightness range. Value between 0 and 1
-	var/light_inner_range = 0 // range, in tiles, the light is at full brightness
+	var/light_inner_range = 1 // range, in tiles, the light is at full brightness
 	var/light_outer_range = 0 // range, in tiles, where the light becomes darkness
 	var/light_falloff_curve = 2 // adjusts curve for falloff gradient. Must be greater than 0.
 	var/light_color		// Hexadecimal RGB string representing the colour of the light

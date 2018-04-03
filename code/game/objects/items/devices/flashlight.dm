@@ -14,7 +14,7 @@
 	var/on = 0
 	var/brightness_on = 90 //range of light when on
 	var/activation_sound = 'sound/effects/flashlight.ogg'
-	var/flashlight_power = 2 //luminosity of light when on, can be negative
+	var/flashlight_max_bright = 2 //luminosity of light when on, can be negative
 
 /obj/item/device/flashlight/Initialize()
 	. = ..()
@@ -23,8 +23,8 @@
 /obj/item/device/flashlight/update_icon()
 	if(on)
 		icon_state = "[initial(icon_state)]-on"
-		if(flashlight_power)
-			set_light(l_range = brightness_on, l_power = flashlight_power)
+		if(flashlight_max_bright)
+			set_light(l_range = brightness_on, l_power = flashlight_max_bright)
 		else
 			set_light(brightness_on)
 	else
@@ -116,7 +116,7 @@
 	icon_state = "biglight"
 	item_state = "biglight"
 	brightness_on = 6
-	flashlight_power = 3
+	flashlight_max_bright = 3
 
 /obj/item/device/flashlight/flashdark
 	name = "flashdark"
@@ -125,7 +125,7 @@
 	item_state = "flashdark"
 	w_class = ITEM_SIZE_NORMAL
 	brightness_on = 8
-	flashlight_power = -6
+	flashlight_max_bright = -6
 
 /obj/item/device/flashlight/pen
 	name = "penlight"
@@ -193,7 +193,7 @@
 	desc = "A red standard-issue flare. There are instructions on the side reading 'pull cord, make light'."
 	w_class = ITEM_SIZE_TINY
 	brightness_on = 8 // Pretty bright.
-	light_power = 3
+	light_max_bright = 3
 	light_color = "#e58775"
 	icon_state = "flare"
 	item_state = "flare"
@@ -248,7 +248,7 @@
 	desc = "A military-grade glowstick."
 	w_class = 2.0
 	brightness_on = 4
-	light_power = 2
+	light_max_bright = 2
 	color = "#49f37c"
 	icon_state = "glowstick"
 	item_state = "glowstick"

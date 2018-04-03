@@ -229,7 +229,7 @@
 		use_power = 0
 		set_light(0)
 
-	active_power_usage = ((light_range * light_power) * LIGHTING_POWER_FACTOR)
+	active_power_usage = ((light_outer_range * light_max_bright) * LIGHTING_POWER_FACTOR)
 
 /obj/machinery/light/proc/get_status()
 	if(!lightbulb)

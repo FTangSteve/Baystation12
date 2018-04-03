@@ -127,8 +127,8 @@
 	var/name
 
 	// These values are primarily for station alarms and status displays, and which light colors and overlays to use
-	var/light_range
-	var/light_power
+	var/light_outer_range
+	var/light_max_bright
 	var/light_color_alarm
 	var/light_color_status_display
 
@@ -184,8 +184,8 @@
 /decl/security_level/default/code_green
 	name = "code green"
 
-	light_range = 2
-	light_power = 1
+	light_outer_range = 2
+	light_max_bright = 1
 
 	light_color_alarm = COLOR_GREEN
 	light_color_status_display = COLOR_GREEN
@@ -198,8 +198,8 @@
 /decl/security_level/default/code_blue
 	name = "code blue"
 
-	light_range = 2
-	light_power = 1
+	light_outer_range = 2
+	light_max_bright = 1
 	light_color_alarm = COLOR_BLUE
 	light_color_status_display = COLOR_BLUE
 
@@ -212,8 +212,8 @@
 /decl/security_level/default/code_red
 	name = "code red"
 
-	light_range = 4
-	light_power = 2
+	light_outer_range = 4
+	light_max_bright = 2
 	light_color_alarm = COLOR_RED
 	light_color_status_display = COLOR_RED
 
@@ -226,8 +226,8 @@
 /decl/security_level/default/code_delta
 	name = "code delta"
 
-	light_range = 4
-	light_power = 2
+	light_outer_range = 4
+	light_max_bright = 2
 	light_color_alarm = COLOR_RED
 	light_color_status_display = COLOR_NAVY_BLUE
 
