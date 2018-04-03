@@ -32,3 +32,11 @@
 	M.Scale(world.view*2.2)
 
 	transform = M
+
+/mob/proc/change_light_colours(var/new_colour)
+	lighting_general.sync(new_colour)
+
+
+/obj/lighting_general/proc/sync(var/new_colour)
+	color = new_colour
+
