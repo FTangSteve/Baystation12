@@ -33,10 +33,13 @@
 
 	transform = M
 
-/mob/proc/change_light_colours(var/new_colour)
-	lighting_general.sync(new_colour)
-
-
 /obj/lighting_general/proc/sync(var/new_colour)
 	color = new_colour
 
+/mob
+	var/obj/lighting_plane/l_plane
+	var/obj/lighting_general/l_general
+
+
+/mob/proc/change_light_colour(var/new_colour)
+	l_general.sync(new_colour)

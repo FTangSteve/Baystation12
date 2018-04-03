@@ -18,8 +18,8 @@ GLOBAL_DATUM_INIT(logged_in_event, /decl/observ/logged_in, new)
 
 /mob/Login()
 	..()
-	lighting_plane = new()
-	lighting_general = new()
-	client.screen += lighting_plane
-	client.screen += lighting_general
+	l_plane = new()
+	l_general = new()
+	client.screen += l_plane
+	client.screen += l_general
 	GLOB.logged_in_event.raise_event(src)
