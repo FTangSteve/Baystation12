@@ -168,12 +168,11 @@
 	item_state = "lamp"
 	w_class = ITEM_SIZE_LARGE
 	obj_flags = OBJ_FLAG_CONDUCTIBLE
-	flashlight_max_bright = 0.5
+	flashlight_max_bright = 0.3
 	flashlight_inner_range = 2
 	flashlight_outer_range = 5
 
 	on = 1
-
 
 // green-shaded desk lamp
 /obj/item/device/flashlight/lamp/green

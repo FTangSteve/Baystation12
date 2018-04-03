@@ -32,7 +32,7 @@
 /datum/build_mode/light_maker/OnClick(var/atom/A, var/list/parameters)
 	if(parameters["left"])
 		if(A)
-			A.set_light(light_outer_range, light_max_bright, light_color)
+			A.set_light(light_max_bright, 0.1, light_max_bright, 2, light_color)
 	if(parameters["right"])
 		if(A)
 			A.set_light(0, 0, COLOR_WHITE)

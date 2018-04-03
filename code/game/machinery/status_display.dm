@@ -175,13 +175,13 @@
 		picture_state = state
 		picture = image('icons/obj/status_display.dmi', icon_state=picture_state)
 	overlays |= picture
-	set_light(1.5, 1, COLOR_WHITE)
+	set_light(0.5, 0.1, 1, 2, COLOR_WHITE)
 
 /obj/machinery/status_display/proc/update_display(line1, line2)
 	var/new_text = {"<div style="font-size:[FONT_SIZE];color:[FONT_COLOR];font:'[FONT_STYLE]';text-align:center;" valign="top">[line1]<br>[line2]</div>"}
 	if(maptext != new_text)
 		maptext = new_text
-	set_light(1.5, 1, COLOR_WHITE)
+	set_light(0.5, 0.1, 1, 2, COLOR_WHITE)
 
 /obj/machinery/status_display/proc/get_shuttle_timer()
 	var/timeleft = evacuation_controller.get_eta()
