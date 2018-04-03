@@ -116,7 +116,7 @@
 
 // Will check if we actually need to update, and update any variables that may need to be updated.
 /datum/light_source/proc/check()
-	if(!source_atom || !light_range || !light_power)
+	if(!source_atom || !light_outer_range || !light_max_bright)
 		destroy()
 		return 1
 
@@ -175,7 +175,7 @@
 
 #define APPLY_CORNER(C)              \
 	. = LUM_FALLOFF(C, source_turf); \
-	. *= light_max_bright;           \
+	. *= (light_max_bright ** 2);    \
 	effect_str[C] = .;               \
 	C.update_lumcount                \
 	(                                \
@@ -196,7 +196,7 @@
 
 // This is the define used to calculate falloff.
 // Assuming a brightness of 1 at range 1, formula should be (brightness = 1 / distance^2)
-// However, due to the weird range factor, brightness = (-(distance - full_dark_start) / (full_dark_start - full_light_end)) ^ light_power
+// However, due to the weird range factor, brightness = (-(distance - full_dark_start) / (full_dark_start - full_light_end)) ^ light_max_bright
 
 #define LUM_FALLOFF(C, T)(CLAMP01(-((((C.x - T.x) ** 2 +(C.y - T.y) ** 2) ** 0.5 - light_outer_range) / (light_outer_range - light_inner_range))) ** light_falloff_curve)
 
@@ -210,7 +210,7 @@
 	applied_lum_g = lum_g
 	applied_lum_b = lum_b
 
-	FOR_DVIEW(var/turf/T, light_range, source_turf, INVISIBILITY_LIGHTING)
+	FOR_DVIEW(var/turf/T, light_outer_range, source_turf, INVISIBILITY_LIGHTING)
 		if(!T.lighting_corners_initialised)
 			T.generate_missing_corners()
 
@@ -303,7 +303,7 @@
 /datum/light_source/proc/smart_vis_update()
 	var/list/datum/lighting_corner/corners = list()
 	var/list/turf/turfs                    = list()
-	FOR_DVIEW(var/turf/T, light_range, source_turf, 0)
+	FOR_DVIEW(var/turf/T, light_outer_range, source_turf, 0)
 		if(!T.lighting_corners_initialised)
 			T.generate_missing_corners()
 		corners |= T.get_corners()
