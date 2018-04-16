@@ -165,10 +165,15 @@
 
 	usr.set_machine(src)
 	if (href_list["track"])
-		var/mob/target = locate(href_list["track"])
+		var/turf/T = locate(href_list["track"])
 		var/mob/living/silicon/ai/A = locate(href_list["track2"])
-		if(A && target)
-			A.ai_actual_track(target)
+		var/mob/living/carbon/human/H = locate(href_list["track3"])
+
+		if(A.ai_radio_track(T, H))
+			to_chat(A, "Tracking target...")
+		else
+			to_chat(A, "Location data is out of range.")
+
 		. = 1
 
 	else if (href_list["freq"])

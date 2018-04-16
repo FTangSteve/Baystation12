@@ -91,6 +91,18 @@
 	stored_locations.Remove(loc)
 	to_chat(src, "Location [loc] removed")
 
+/mob/living/silicon/ai/proc/ai_radio_track(var/turf/T, var/mob/living/carbon/human/H)
+	// See first if the person has sensors on to track them
+	if(H.tracking_status() == TRACKING_SENSORS || H.tracking_status())
+		ai_actual_track(H)
+		return TRUE
+	// If not, try to go to the turf that the person was at when they talked
+	if(cameranet.is_turf_visible(T))
+		eyeobj.setLoc(T)
+		return TRUE
+	// Otherwise, you're out of luck
+	return FALSE
+	
 // Used to allow the AI is write in mob names/camera name from the CMD line.
 /datum/trackable
 	var/list/names = list()
