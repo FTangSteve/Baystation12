@@ -1,4 +1,5 @@
 #define WORLD_ICON_SIZE 32
+#define UNIT_TEST 1
 
 //This file is just for the necessary /world definition
 //Try looking in game/world.dm
