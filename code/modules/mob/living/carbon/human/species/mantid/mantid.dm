@@ -135,5 +135,21 @@
 	additional_langs = list(LANGUAGE_MANTID_BROADCAST, LANGUAGE_MANTID_VOCAL)
 	hud_type = /datum/hud_data/mantid //todo
 
+	has_organ = list(    // which required-organ checks are conducted.
+		BP_BRAIN =    /obj/item/organ/internal/brain/nabber,
+		BP_EYES =     /obj/item/organ/internal/eyes/nabber,
+		BP_TRACH =    /obj/item/organ/internal/lungs/nabber,
+		BP_HEART =    /obj/item/organ/internal/heart/open,
+		BP_LIVER =    /obj/item/organ/internal/liver/nabber,
+		)
+
+
 /datum/species/nabber/monarch/get_bodytype(var/mob/living/carbon/human/H)
 	return SPECIES_NABBER
+
+
+
+/datum/species/nabber/monarch/worker
+
+/datum/species/nabber/monarch/queen
+
