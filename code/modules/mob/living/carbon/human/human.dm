@@ -953,18 +953,40 @@
 
 	if(!is_physically_disabled())
 		var/turf/above = GetAbove(src)
-		if(shadow)
-			if(client.eye == shadow)
+		if(above_shadow)
+			if(client.eye == above_shadow)
 				reset_view(0)
 				return
 			if(istype(above, /turf/simulated/open))
 				to_chat(src, "<span class='notice'>You look up.</span>")
 				if(client)
-					reset_view(shadow)
+					reset_view(above_shadow)
 				return
 		to_chat(src, "<span class='notice'>You can see \the [above].</span>")
 	else
 		to_chat(src, "<span class='notice'>You can't look up right now.</span>")
+	return
+
+/mob/living/carbon/human/verb/lookdown()
+	set name = "Look down"
+	set desc = "If you want to know what's below."
+	set category = "IC"
+
+	if(!is_physically_disabled())
+		var/turf/T = get_turf(src)
+		var/turf/below = GetBelow(src)
+
+		if(below)
+			if(client.eye == below_shadow)
+				reset_view(0)
+				return
+			if(istype(T, /turf/simulated/open))
+				to_chat(src, "<span class='notice'>You look down.</span>")
+				if(client)
+					reset_view(below_shadow)
+		to_chat(src, "<span class='notice'>You can see \the [below].</span>")
+	else
+		to_chat(src, "<span class='notice'>You can't look down right now.</span>")
 	return
 
 /mob/living/carbon/human/proc/set_species(var/new_species, var/default_colour = 1)

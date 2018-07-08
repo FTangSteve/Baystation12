@@ -1,5 +1,6 @@
 /mob  // TODO: rewrite as obj. If more efficient
-	var/mob/zshadow/shadow
+	var/mob/zshadow/above_shadow
+	var/mob/zshadow/below_shadow
 
 /mob/zshadow
 	plane = OVER_OPENSPACE_PLANE
@@ -28,9 +29,9 @@
 
 
 /mob/Destroy()
-	if(shadow)
-		qdel(shadow)
-		shadow = null
+	if(above_shadow)
+		qdel(above_shadow)
+		above_shadow = null
 	. = ..()
 
 /mob/zshadow/Destroy()
@@ -57,26 +58,42 @@
 	dir = M.dir
 	src.layer = lay
 	src.plane = pln
-	if(shadow)
-		shadow.sync_icon(src)
+	if(above_shadow)
+		above_shadow.sync_icon(src)
 
 /mob/living/proc/check_shadow()
 	var/mob/M = src
 	if(isturf(M.loc))
 		for(var/turf/simulated/open/OS = GetAbove(src); OS && istype(OS); OS = GetAbove(OS))
 			//Check above
-			if(!M.shadow)
-				M.shadow = new /mob/zshadow(M)
-			M.shadow.forceMove(OS)
-			M = M.shadow
+			if(!M.above_shadow)
+				M.above_shadow = new /mob/zshadow(M)
+			M.above_shadow.forceMove(OS)
+			M = M.above_shadow
 
-	// Clean up mob shadow if it has one
-	if(M.shadow)
-		var/client/C = src.client
-		if(C && C.eye == M.shadow)
-			src.reset_view(0)
-		qdel(M.shadow)
-		M.shadow = null
+		M.clean_shadow(above_shadow)
+			
+		M = src
+			
+		for(var/turf/simulated/open/OS = get_turf(src); OS && istype(OS); OS = GetBelow(OS))
+			//Check above
+			var/turf/below = GetBelow(OS)
+			if(!M.below_shadow)
+				M.below_shadow = new /mob/zshadow(M)
+			M.below_shadow.forceMove(below)
+			M = M.below_shadow
+
+		M.clean_shadow(below_shadow)
+	else
+		M.clean_shadow(above_shadow)
+		M.clean_shadow(below_shadow)
+
+
+/mob/proc/clean_shadow(var/mob/zshadow/Z)
+	var/client/C = src.client
+	if(C && C.eye == Z)
+		src.reset_view(0)
+	QDEL_NULL(Z)
 
 //
 // Handle cases where the owner mob might have changed its icon or overlays.
@@ -84,15 +101,15 @@
 
 /mob/living/update_icons()
 	. = ..()
-	if(shadow)
-		shadow.sync_icon(src)
+	if(above_shadow)
+		above_shadow.sync_icon(src)
 
 // WARNING - the true carbon/human/update_icons does not call ..(), therefore we must sideways override this.
 // But be careful, we don't want to screw with that proc.  So lets be cautious about what we do here.
 /mob/living/carbon/human/update_icons()
 	. = ..()
-	if(shadow)
-		shadow.sync_icon(src)
+	if(above_shadow)
+		above_shadow.sync_icon(src)
 
 //Copy direction
 /mob/zshadow/proc/update_dir()
@@ -102,8 +119,8 @@
 //Change name of shadow if it's updated too (generally moving will sync but static updates are handy)
 /mob/fully_replace_character_name(var/new_name, var/in_depth = TRUE)
 	. = ..()
-	if(shadow)
-		shadow.fully_replace_character_name(new_name)
+	if(above_shadow)
+		above_shadow.fully_replace_character_name(new_name)
 
 
 /mob/zshadow/proc/update_invisibility()
