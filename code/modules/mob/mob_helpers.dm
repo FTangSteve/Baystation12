@@ -24,14 +24,9 @@
 	return 0
 
 /mob/living/carbon/human/isSynthetic()
-	if(isnull(full_prosthetic))
-		robolimb_count = 0
-		for(var/obj/item/organ/external/E in organs)
-			if(BP_IS_ROBOTIC(E))
-				robolimb_count++
-		full_prosthetic = (robolimb_count == organs.len)
-		update_emotes()
-	return full_prosthetic
+	if(species && species.is_synthetic)
+		return TRUE
+	return FALSE
 
 /mob/living/silicon/isSynthetic()
 	return 1

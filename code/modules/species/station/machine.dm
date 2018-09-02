@@ -11,6 +11,8 @@
 
 	preview_icon = 'icons/mob/human_races/species/ipc/preview.dmi'
 
+	is_synthetic = TRUE
+	
 	unarmed_types = list(/datum/unarmed_attack/punch)
 	rarity_value = 2
 	strength = STR_HIGH

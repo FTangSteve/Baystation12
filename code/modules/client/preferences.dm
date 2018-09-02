@@ -199,7 +199,7 @@ datum/preferences
 			qdel(O)
 		else if(status == "cyborg")
 			if(rlimb_data[name])
-				O.robotize(rlimb_data[name])
+				O.robotize(rlimb_data[name], 0, 1)
 			else
 				O.robotize()
 		else //normal organ

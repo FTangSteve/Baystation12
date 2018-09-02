@@ -124,7 +124,7 @@
 			rupture()
 
 /obj/item/organ/internal/lungs/proc/handle_breath(datum/gas_mixture/breath, var/forced)
-
+	DBG("in breath of [owner]")
 	if(!owner)
 		return 1
 

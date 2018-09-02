@@ -43,3 +43,4 @@
 	icon_state = "mirror_broke"
 	anchored = 1
 	density = 0
+	

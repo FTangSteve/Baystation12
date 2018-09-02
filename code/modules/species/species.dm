@@ -223,6 +223,8 @@
 
 	var/list/base_auras
 
+	var/is_synthetic = FALSE
+	
 	var/sexybits_location	//organ tag where they are located if they can be kicked for increased pain
 
 	var/list/prone_overlay_offset = list(0, 0) // amount to shift overlays when lying
