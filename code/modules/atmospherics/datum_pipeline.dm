@@ -9,7 +9,9 @@
 	var/list/leaks = list()
 
 	var/alert_pressure = 0
-
+	var/report = TRUE
+	var/global/glob_report = FALSE
+	
 /datum/pipeline/New()
 	START_PROCESSING(SSprocessing, src)
 
@@ -29,6 +31,35 @@
 
 /datum/pipeline/Process()//This use to be called called from the pipe networks
 	//Check to see if pressure is within acceptable limits
+	
+	if(air.gas["phoron"] > 0.00001 && report && glob_report)
+		var/message = "<A HREF='?_src_=vars;Vars=\ref[src]'>\ref[src]</A>"
+		message += " Phoron: [air.gas["phoron"]] phoron "
+		//var/supply = (var/obj/machinery/atmospherics/pipe/simple/hidden/supply/hs in edges || var/obj/machinery/atmospherics/pipe/simple/visible/supply/vs in edges)
+		//var/scrub = (var/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers/hw in edges || var/obj/machinery/atmospherics/pipe/simple/visible/scrubbers/vw in edges)
+		var/supply = (locate(/obj/machinery/atmospherics/pipe/simple/hidden/supply) in edges) || (locate(/obj/machinery/atmospherics/pipe/simple/visible/supply) in edges)
+		var/scrub = (locate(/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers) in edges) || (locate(/obj/machinery/atmospherics/pipe/simple/visible/scrubbers) in edges)
+		
+		message += "edges "
+
+		if(supply)
+			message += "supply "
+		if(scrub)
+			message += "scrub "
+			
+		supply = (locate(/obj/machinery/atmospherics/pipe/simple/hidden/supply) in members || locate(/obj/machinery/atmospherics/pipe/simple/visible/supply) in members)
+		scrub = (locate(/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers) in members || locate(/obj/machinery/atmospherics/pipe/simple/visible/scrubbers) in members)
+			
+		message += "members "
+		
+		if(supply)
+			message += "supply "
+		if(scrub)
+			message += "scrub "
+
+		
+		message_admins(message)
+	
 	var/pressure = air.return_pressure()
 	if(pressure > alert_pressure)
 		for(var/obj/machinery/atmospherics/pipe/member in members)

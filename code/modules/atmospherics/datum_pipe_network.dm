@@ -8,6 +8,31 @@
 	var/list/leaks = list()
 	var/update = 1
 
+	var/i
+	var/j
+
+/datum/pipe_network/proc/find_crossover()
+	var/message	= "Shared pipes are:\n"
+	var/list/obj/machinery/atmospherics/pipe/shared_pipe_list = list()
+	for(var/i=1; i<=line_members.len-1; i++)
+		var/datum/pipeline/check_base = line_members[i]
+		for(var/j=i+1; j<=line_members.len; j++)
+			var/datum/pipeline/check_against = line_members[j]
+
+			for(var/obj/machinery/atmospherics/pipe/base_pipe in check_base.edges)
+				for(var/obj/machinery/atmospherics/pipe/against_pipe in check_against.edges)
+					var/list/obj/machinery/atmospherics/pipe/anded_list = (base_pipe.pipeline_expansion() + base_pipe) & (against_pipe.pipeline_expansion() + against_pipe)
+
+					if(anded_list.len > 0)
+						for(var/obj/v in anded_list)
+							message += "[v.name] <A HREF='?_src_=vars;Vars=\ref[v]'>\ref[v]</A> \n"
+
+						message_admins("under shared pipes")
+						shared_pipe_list.Add(anded_list)
+
+	message_admins(message)
+
+
 /datum/pipe_network/Destroy()
 	STOP_PROCESSING_PIPENET(src)
 	for(var/datum/pipeline/line_member in line_members)
